@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>PlacetoPay, Simon Godoy</Authors>
+    <Description>SDK Redirection for .Net Framework</Description>
+    <PackageTags></PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.0.1</Version>
+    <Company>PlacetoPay</Company>
+    <PackageProjectUrl>https://www.placetopay.com/web/</PackageProjectUrl>
+    <PackageIcon>placetopay.png</PackageIcon>
+    <RepositoryUrl>https://github.com/sgodoy17/placetopay-redirection-csharp</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>For full release notes see https://github.com/sgodoy17/placetopay-redirection-csharp/blob/master/releasenotes.md</PackageReleaseNotes>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\PlacetoPay.Redirection.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;NETCORE</DefineConstants>
+    <NoWarn>1701;1702;1591;NU5105</NoWarn>
+    <DocumentationFile>obj\Debug\netstandard2.0\PlacetoPay.Redirection.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RestSharp" Version="106.10.1" />
+    <PackageReference Include="SoapHttpClient" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\placetopay.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
