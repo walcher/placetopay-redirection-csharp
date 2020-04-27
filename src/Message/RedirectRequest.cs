@@ -76,6 +76,82 @@ namespace PlacetoPay.Redirection.Message
             {
                 locale = (string)json.GetValue("locale");
             }
+
+            payer = json.ContainsKey("payer") ? json.GetValue("payer").ToString() : null;
+            buyer = json.ContainsKey("buyer") ? json.GetValue("buyer").ToString() : null;
+            payment = json.ContainsKey("payment") ? json.GetValue("payment").ToString() : null;
+            subscription = json.ContainsKey("subscription") ? json.GetValue("subscription").ToString() : null;
+            fields = json.ContainsKey("fields") ? json.GetValue("fields").ToString() : null;
+        }
+
+        /// <summary>
+        /// RedirectRequest constructor.
+        /// </summary>
+        /// <param name="payer">string</param>
+        /// <param name="buyer">string</param>
+        /// <param name="payment">string</param>
+        /// <param name="returnUrl">string</param>
+        /// <param name="paymentMethod">string</param>
+        public RedirectRequest(
+            string payer,
+            string buyer,
+            string payment,
+            string returnUrl,
+            string paymentMethod
+            )
+        {
+            this.payer = payer;
+            this.buyer = buyer;
+            this.payment = payment;
+            this.returnUrl = returnUrl;
+            this.paymentMethod = paymentMethod;
+        }
+
+        /// <summary>
+        /// RedirectRequest constructor.
+        /// </summary>
+        /// <param name="payer">string</param>
+        /// <param name="buyer">string</param>
+        /// <param name="payment">string</param>
+        /// <param name="subscription">string</param>
+        /// <param name="returnUrl">string</param>
+        /// <param name="paymentMethod">string</param>
+        /// <param name="cancelUrl">string</param>
+        /// <param name="ipAddress">string</param>
+        /// <param name="userAgent">string</param>
+        /// <param name="expiration">string</param>
+        /// <param name="captureAddress">bool</param>
+        /// <param name="noBuyerFill">bool</param>
+        /// <param name="skipResult">bool</param>
+        public RedirectRequest(
+            string payer,
+            string buyer,
+            string payment,
+            string subscription,
+            string returnUrl,
+            string paymentMethod,
+            string cancelUrl,
+            string ipAddress,
+            string userAgent,
+            string expiration,
+            bool captureAddress,
+            bool noBuyerFill,
+            bool skipResult
+            )
+        {
+            this.payer = payer;
+            this.buyer = buyer;
+            this.payment = payment;
+            this.subscription = subscription;
+            this.returnUrl = returnUrl;
+            this.paymentMethod = paymentMethod;
+            this.cancelUrl = cancelUrl;
+            this.ipAddress = ipAddress;
+            this.userAgent = userAgent;
+            this.expiration = expiration;
+            this.captureAddress = captureAddress;
+            this.noBuyerFill = noBuyerFill;
+            this.skipResult = skipResult;
         }
 
         /// <summary>
@@ -166,7 +242,7 @@ namespace PlacetoPay.Redirection.Message
         {
             get { return noBuyerFill; }
             set { noBuyerFill = value; }
-        }        
+        }
 
         /// <summary>
         /// Payer property.
