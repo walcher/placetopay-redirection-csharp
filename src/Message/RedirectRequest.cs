@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Entities;
 using System;
 using System.IO;
 
@@ -12,9 +13,9 @@ namespace PlacetoPay.Redirection.Message
     public class RedirectRequest : Entity
     {
         protected string locale = "es_CO";
-        protected string payer;
-        protected string buyer;
-        protected string payment;
+        protected Person payer;
+        protected Person buyer;
+        protected Payment payment;
         protected string subscription;
         protected string returnUrl;
         protected string paymentMethod;
@@ -45,9 +46,9 @@ namespace PlacetoPay.Redirection.Message
                 locale = (string)data.GetValue("locale");
             }
 
-            payer = data.ContainsKey("payer") ? data.GetValue("payer").ToString() : null;
-            buyer = data.ContainsKey("buyer") ? data.GetValue("buyer").ToString() : null;
-            payment = data.ContainsKey("payment") ? data.GetValue("payment").ToString() : null;
+            payer = data.ContainsKey("payer") ? new Person(data.GetValue("payer").ToObject<JObject>()) : null;
+            buyer = data.ContainsKey("buyer") ? new Person(data.GetValue("buyer").ToObject<JObject>()) : null;
+            payment = data.ContainsKey("payment") ? new Payment(data.GetValue("payment").ToObject<JObject>()) : null;
             subscription = data.ContainsKey("subscription") ? data.GetValue("subscription").ToString() : null;
             fields = data.ContainsKey("fields") ? data.GetValue("fields").ToString() : null;
         }
@@ -77,9 +78,9 @@ namespace PlacetoPay.Redirection.Message
                 locale = (string)json.GetValue("locale");
             }
 
-            payer = json.ContainsKey("payer") ? json.GetValue("payer").ToString() : null;
-            buyer = json.ContainsKey("buyer") ? json.GetValue("buyer").ToString() : null;
-            payment = json.ContainsKey("payment") ? json.GetValue("payment").ToString() : null;
+            payer = json.ContainsKey("payer") ? new Person(json.GetValue("payer").ToObject<JObject>()) : null;
+            buyer = json.ContainsKey("buyer") ? new Person(json.GetValue("buyer").ToObject<JObject>()) : null;
+            payment = json.ContainsKey("payment") ? new Payment(json.GetValue("payment").ToObject<JObject>()) : null;
             subscription = json.ContainsKey("subscription") ? json.GetValue("subscription").ToString() : null;
             fields = json.ContainsKey("fields") ? json.GetValue("fields").ToString() : null;
         }
@@ -87,15 +88,15 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// RedirectRequest constructor.
         /// </summary>
-        /// <param name="payer">string</param>
-        /// <param name="buyer">string</param>
-        /// <param name="payment">string</param>
+        /// <param name="payer">Person</param>
+        /// <param name="buyer">Person</param>
+        /// <param name="payment">Payment</param>
         /// <param name="returnUrl">string</param>
         /// <param name="paymentMethod">string</param>
         public RedirectRequest(
-            string payer,
-            string buyer,
-            string payment,
+            Person payer,
+            Person buyer,
+            Payment payment,
             string returnUrl,
             string paymentMethod
             )
@@ -110,9 +111,9 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// RedirectRequest constructor.
         /// </summary>
-        /// <param name="payer">string</param>
-        /// <param name="buyer">string</param>
-        /// <param name="payment">string</param>
+        /// <param name="payer">Person</param>
+        /// <param name="buyer">Person</param>
+        /// <param name="payment">Payment</param>
         /// <param name="subscription">string</param>
         /// <param name="returnUrl">string</param>
         /// <param name="paymentMethod">string</param>
@@ -124,9 +125,9 @@ namespace PlacetoPay.Redirection.Message
         /// <param name="noBuyerFill">bool</param>
         /// <param name="skipResult">bool</param>
         public RedirectRequest(
-            string payer,
-            string buyer,
-            string payment,
+            Person payer,
+            Person buyer,
+            Payment payment,
             string subscription,
             string returnUrl,
             string paymentMethod,
@@ -247,7 +248,7 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Payer property.
         /// </summary>
-        public string Payer
+        public Person Payer
         {
             get { return payer; }
             set { payer = value; }
@@ -256,7 +257,7 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Buyer property.
         /// </summary>
-        public string Buyer
+        public Person Buyer
         {
             get { return buyer; }
             set { buyer = value; }
@@ -265,7 +266,7 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Payment property.
         /// </summary>
-        public string Payment
+        public Payment Payment
         {
             get { return payment; }
             set { payment = value; }

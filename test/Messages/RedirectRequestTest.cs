@@ -119,6 +119,13 @@ namespace PlacetoPay.RedirectionTests.Messages
                 noBuyerFill = true,
                 captureAddress = true,
                 paymentMethod = "CR_VS,_ATH_",
+                fields = new[] {
+                    new {
+                        keyword = "Redeem Code",
+                        value = 899404,
+                        displayOn = "payment",
+                    },
+                },
             });
 
             JsonReader reader = new JsonTextReader(new StringReader(data))
