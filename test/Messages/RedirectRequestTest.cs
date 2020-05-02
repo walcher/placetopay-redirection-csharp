@@ -25,6 +25,7 @@ namespace PlacetoPay.RedirectionTests.Messages
                     mobile = "3012563232",
                     address = new
                     {
+
                         street = "Fake street 123",
                         city = "Medellin",
                         state = "Antioquia",
