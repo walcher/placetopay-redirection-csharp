@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -52,6 +54,25 @@ namespace PlacetoPay.Redirection.Traits
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Set list of fields.
+        /// </summary>
+        /// <param name="fields">JArray</param>
+        public void SetFields(JArray fields)
+        {
+            List<NameValuePair> list = new List<NameValuePair>();
+
+            foreach (var field in fields)
+            {
+                JObject fieldDetail = field.ToObject<JObject>();
+
+                list.Add(new NameValuePair(fieldDetail));
+            }
+
+            PropertyInfo propertyInfo = GetType().GetProperty("Fields");
+            propertyInfo.SetValue(this, list);
         }
 
         /// <summary>

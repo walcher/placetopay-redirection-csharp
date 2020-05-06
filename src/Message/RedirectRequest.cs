@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace PlacetoPay.Redirection.Message
@@ -16,7 +17,7 @@ namespace PlacetoPay.Redirection.Message
         protected Person payer;
         protected Person buyer;
         protected Payment payment;
-        protected string subscription;
+        protected Subscription subscription;
         protected string returnUrl;
         protected string paymentMethod;
         protected string cancelUrl;
@@ -26,7 +27,7 @@ namespace PlacetoPay.Redirection.Message
         protected bool captureAddress;
         protected bool skipResult = false;
         protected bool noBuyerFill = false;
-        protected string fields;
+        protected List<NameValuePair> fields;
 
         /// <summary>
         /// RedirectRequest constructor.
@@ -49,8 +50,12 @@ namespace PlacetoPay.Redirection.Message
             payer = data.ContainsKey("payer") ? new Person(data.GetValue("payer").ToObject<JObject>()) : null;
             buyer = data.ContainsKey("buyer") ? new Person(data.GetValue("buyer").ToObject<JObject>()) : null;
             payment = data.ContainsKey("payment") ? new Payment(data.GetValue("payment").ToObject<JObject>()) : null;
-            subscription = data.ContainsKey("subscription") ? data.GetValue("subscription").ToString() : null;
-            fields = data.ContainsKey("fields") ? data.GetValue("fields").ToString() : null;
+            subscription = data.ContainsKey("subscription") ? new Subscription(data.GetValue("subscription").ToObject<JObject>()) : null;
+
+            if (data.ContainsKey("fields"))
+            {
+                SetFields(data.GetValue("fields").ToObject<JArray>());
+            }
         }
 
         /// <summary>
@@ -81,8 +86,12 @@ namespace PlacetoPay.Redirection.Message
             payer = json.ContainsKey("payer") ? new Person(json.GetValue("payer").ToObject<JObject>()) : null;
             buyer = json.ContainsKey("buyer") ? new Person(json.GetValue("buyer").ToObject<JObject>()) : null;
             payment = json.ContainsKey("payment") ? new Payment(json.GetValue("payment").ToObject<JObject>()) : null;
-            subscription = json.ContainsKey("subscription") ? json.GetValue("subscription").ToString() : null;
-            fields = json.ContainsKey("fields") ? json.GetValue("fields").ToString() : null;
+            subscription = json.ContainsKey("subscription") ? new Subscription(json.GetValue("subscription").ToObject<JObject>()) : null;
+
+            if (json.ContainsKey("fields"))
+            {
+                SetFields(json.GetValue("fields").ToObject<JArray>());
+            }
         }
 
         /// <summary>
@@ -114,7 +123,7 @@ namespace PlacetoPay.Redirection.Message
         /// <param name="payer">Person</param>
         /// <param name="buyer">Person</param>
         /// <param name="payment">Payment</param>
-        /// <param name="subscription">string</param>
+        /// <param name="subscription">Subscription</param>
         /// <param name="returnUrl">string</param>
         /// <param name="paymentMethod">string</param>
         /// <param name="cancelUrl">string</param>
@@ -124,11 +133,12 @@ namespace PlacetoPay.Redirection.Message
         /// <param name="captureAddress">bool</param>
         /// <param name="noBuyerFill">bool</param>
         /// <param name="skipResult">bool</param>
+        /// <param name="fields">List</param>
         public RedirectRequest(
             Person payer,
             Person buyer,
             Payment payment,
-            string subscription,
+            Subscription subscription,
             string returnUrl,
             string paymentMethod,
             string cancelUrl,
@@ -137,7 +147,8 @@ namespace PlacetoPay.Redirection.Message
             string expiration,
             bool captureAddress,
             bool noBuyerFill,
-            bool skipResult
+            bool skipResult,
+            List<NameValuePair> fields
             )
         {
             this.payer = payer;
@@ -153,6 +164,7 @@ namespace PlacetoPay.Redirection.Message
             this.captureAddress = captureAddress;
             this.noBuyerFill = noBuyerFill;
             this.skipResult = skipResult;
+            this.fields = fields;
         }
 
         /// <summary>
@@ -275,7 +287,7 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Subscription property.
         /// </summary>
-        public string Subscription
+        public Subscription Subscription
         {
             get { return subscription; }
             set { subscription = value; }
@@ -284,7 +296,7 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Fields property.
         /// </summary>
-        public string Fields
+        public List<NameValuePair> Fields
         {
             get { return fields; }
             set { fields = value; }
@@ -298,6 +310,25 @@ namespace PlacetoPay.Redirection.Message
         {
             return locale.Substring(0, 2).ToUpper();
         }
+
+        /// <summary>
+        /// Set list of fields.
+        /// </summary>
+        /// <param name="fields">JArray</param>
+        /// <returns>List</returns>
+        //private List<NameValuePair> SetFields(JArray fields)
+        //{
+        //    List<NameValuePair> list = new List<NameValuePair>();
+
+        //    foreach (var field in fields)
+        //    {
+        //        JObject fieldDetail = field.ToObject<JObject>();
+
+        //        list.Add(new NameValuePair(fieldDetail));
+        //    }
+
+        //    return list;
+        //}
 
         /// <summary>
         /// Json Object sent back from API.

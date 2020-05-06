@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using System;
+using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -14,15 +15,15 @@ namespace PlacetoPay.Redirection.Entities
         protected Amount amount;
         protected bool allowPartial = false;
         protected Person shipping;
-        protected string items;
-        protected string fields;
-        protected string recurring;
+        protected List<Item> items;
+        protected List<NameValuePair> fields;
+        protected Recurring recurring;
         protected string discount;
         protected string instrument;
         protected bool subscribe = false;
         protected string agreement;
         protected string agreementType;
-        protected string gds;
+        protected GDS gds;
 
         /// <summary>
         /// Payment constructor.
@@ -30,14 +31,19 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Payment(JObject data)
         {
-            Load(data, new JArray { "reference", "description", "allowPartial", "subscribe", "items", "agreement", "agreementType" });
+            Load(data, new JArray { "reference", "description", "allowPartial", "subscribe", "agreement", "agreementType" });
 
             amount = data.ContainsKey("amount") ? new Amount(data.GetValue("amount").ToObject<JObject>()) : null;
-            recurring = data.ContainsKey("recurring") ? data.GetValue("recurring").ToString() : null;
+            recurring = data.ContainsKey("recurring") ? new Recurring(data.GetValue("recurring").ToObject<JObject>()) : null;
             shipping = data.ContainsKey("shipping") ? new Person(data.GetValue("shipping").ToObject<JObject>()) : null;
-            items = data.ContainsKey("items") ? data.GetValue("items").ToString() : null;
-            fields = data.ContainsKey("fields") ? data.GetValue("fields").ToString() : null;
-            gds = data.ContainsKey("gds") ? data.GetValue("gds").ToString() : null;
+            items = data.ContainsKey("items") ? SetItem(data.GetValue("items").ToObject<JArray>()) : null;
+
+            if (data.ContainsKey("fields"))
+            {
+                SetFields(data.GetValue("fields").ToObject<JArray>());
+            }
+
+            gds = data.ContainsKey("gds") ? new GDS(data.GetValue("gds").ToObject<JObject>()) : null;
         }
 
         /// <summary>
@@ -88,7 +94,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Gds property.
         /// </summary>
-        public string Gds
+        public GDS Gds
         {
             get { return gds; }
             set { gds = value; }
@@ -115,7 +121,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Items property.
         /// </summary>
-        public string Items
+        public List<Item> Items
         {
             get { return items; }
             set { items = value; }
@@ -124,7 +130,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Recurring property.
         /// </summary>
-        public string Recurring
+        public Recurring Recurring
         {
             get { return recurring; }
             set { recurring = value; }
@@ -137,6 +143,34 @@ namespace PlacetoPay.Redirection.Entities
         {
             get { return subscribe; }
             set { subscribe = value; }
+        }
+
+        /// <summary>
+        /// Fields property.
+        /// </summary>
+        public List<NameValuePair> Fields
+        {
+            get { return fields; }
+            set { fields = value; }
+        }
+
+        /// <summary>
+        /// Set list of items.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns></returns>
+        private List<Item> SetItem(JArray items)
+        {
+            List<Item> list = new List<Item>();
+
+            foreach (var item in items)
+            {
+                JObject itemDetail = item.ToObject<JObject>();
+
+                list.Add(new Item(itemDetail));
+            }
+
+            return list;
         }
 
         /// <summary>

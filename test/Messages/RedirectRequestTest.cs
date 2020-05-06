@@ -25,7 +25,6 @@ namespace PlacetoPay.RedirectionTests.Messages
                     mobile = "3012563232",
                     address = new
                     {
-
                         street = "Fake street 123",
                         city = "Medellin",
                         state = "Antioquia",
@@ -52,6 +51,18 @@ namespace PlacetoPay.RedirectionTests.Messages
                         phone = "4442311",
                     },
                 },
+                instrument = new
+                {
+                    card = new
+                    {
+                        number = "4111111111111111",
+                        expirationMonth = "12",
+                        expirationYear = "23",
+                        cvv = "123",
+                        installments = 12,
+                        kind = "C",
+                    },
+                },
                 payment = new
                 {
                     reference = "Testing_2020",
@@ -63,8 +74,12 @@ namespace PlacetoPay.RedirectionTests.Messages
                             new
                             {
                                 kind = "valueAddedTax",
+                                amount = 1.9,
+                            },
+                            new
+                            {
+                                kind = "ice",
                                 amount = 1.2,
-                                baseAmount = 8,
                             },
                         },
                         details = new[]
@@ -82,6 +97,18 @@ namespace PlacetoPay.RedirectionTests.Messages
                         },
                         currency = "USD",
                         total = 10.283,
+                    },
+                    items = new[]
+                    {
+                        new
+                        {
+                            sku = 66319,
+                            name = "Atque id.",
+                            category = "physical",
+                            qty = 1,
+                            price = 10,
+                            tax = 1.9,
+                        },
                     },
                     recurring = new
                     {
@@ -137,6 +164,33 @@ namespace PlacetoPay.RedirectionTests.Messages
             JObject json = JObject.Load(reader);
 
             var request = new RedirectRequest(json);
+
+            Assert.True(true);
+        }
+
+        [Test]
+        public void ItParsesCorrectlyAPaymentStringRequestTest()
+        {
+            string test =
+            "{  " +
+            "   \"payment\":{  " +
+            "      \"reference\":\"TESTING123456\"," +
+            "      \"amount\":{  " +
+            "         \"currency\":\"COP\"," +
+            "         \"total\":\"10000\"," +
+            "         \"taxes\":[" +
+            "            {  " +
+            "               \"kind\":\"valueAddedTax\"," +
+            "               \"amount\":\"1.2\"," +
+            "               \"base\":\"8\"" +
+            "            }" +
+            "         ]" +
+            "      }" +
+            "   }," +
+            "   \"returnUrl\":\"http:\\/\\/your.url.com\\/return?reference=TESTING123456\"" +
+            "}";
+
+            var tetero = new RedirectRequest(test);
 
             Assert.True(true);
         }

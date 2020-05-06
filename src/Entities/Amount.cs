@@ -39,10 +39,15 @@ namespace PlacetoPay.Redirection.Entities
         /// Amount constructor.
         /// </summary>
         /// <param name="taxes">List</param>
-        /// <param name="details"></param>
-        /// <param name="total"></param>
-        /// <param name="currency"></param>
-        public Amount(List<TaxDetail> taxes, List<AmountDetail> details, double total, string currency) : base(currency, total)
+        /// <param name="details">List</param>
+        /// <param name="total">double</param>
+        /// <param name="currency">double</param>
+        public Amount(
+            List<TaxDetail> taxes,
+            List<AmountDetail> details,
+            double total,
+            string currency
+            ) : base(currency, total)
         {
             this.taxes = taxes;
             this.details = details;

@@ -19,7 +19,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public TaxDetail(JObject data)
         {
-            Load(data, new JArray { "kind", "amount", "baseAmount" });
+            Load(data, new JArray { "kind", "amount", "base" });
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "kind", "amount", "baseAmount" });
+            Load(json, new JArray { "kind", "amount", "base" });
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace PlacetoPay.Redirection.Entities
         }
 
         /// <summary>
-        /// BaseAmount property.
+        /// Base property.
         /// </summary>
-        public double BaseAmount
+        public double Base
         {
             get { return baseAmount; }
             set { baseAmount = value; }
