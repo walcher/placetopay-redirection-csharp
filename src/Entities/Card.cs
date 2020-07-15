@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -27,7 +28,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Card(JObject data)
         {
-            Load(data, new JArray { "name", "number", "expirationMonth", "expirationYear", "installments", "kind", "cvv" });
+            this.Load<Card>(data, new JArray { "name", "number", "expirationMonth", "expirationYear", "installments", "kind", "cvv" });
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "name", "number", "expirationMonth", "expirationYear", "installments", "kind", "cvv" });
+            this.Load<Card>(json, new JArray { "name", "number", "expirationMonth", "expirationYear", "installments", "kind", "cvv" });
         }
 
         /// <summary>

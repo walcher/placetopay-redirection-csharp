@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -20,11 +21,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Subscription(JObject data)
         {
-            Load(data, new JArray { "reference", "description" });
+            this.Load<Subscription>(data, new JArray { "reference", "description" });
 
             if (data.ContainsKey("fields"))
             {
-                SetFields(data.GetValue("fields").ToObject<JArray>());
+                this.SetFields<Subscription>(data.GetValue("fields").ToObject<JArray>());
             }
         }
 
@@ -36,11 +37,11 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "reference", "description" });
+            this.Load<Subscription>(json, new JArray { "reference", "description" });
 
             if (json.ContainsKey("fields"))
             {
-                SetFields(json.GetValue("fields").ToObject<JArray>());
+                this.SetFields<Subscription>(json.GetValue("fields").ToObject<JArray>());
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -31,7 +32,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Payment(JObject data)
         {
-            Load(data, new JArray { "reference", "description", "allowPartial", "subscribe", "agreement", "agreementType" });
+            this.Load<Payment>(data, new JArray { "reference", "description", "allowPartial", "subscribe", "agreement", "agreementType" });
 
             amount = data.ContainsKey("amount") ? new Amount(data.GetValue("amount").ToObject<JObject>()) : null;
             recurring = data.ContainsKey("recurring") ? new Recurring(data.GetValue("recurring").ToObject<JObject>()) : null;
@@ -40,7 +41,7 @@ namespace PlacetoPay.Redirection.Entities
 
             if (data.ContainsKey("fields"))
             {
-                SetFields(data.GetValue("fields").ToObject<JArray>());
+                this.SetFields<Payment>(data.GetValue("fields").ToObject<JArray>());
             }
 
             gds = data.ContainsKey("gds") ? new GDS(data.GetValue("gds").ToObject<JObject>()) : null;

@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
+using PlacetoPay.Redirection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace PlacetoPay.Redirection.Message
                 expiration = (DateTime.Now).AddDays(+1).ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
             }
 
-            Load(data, new JArray { "returnUrl", "paymentMethod", "cancelUrl", "ipAddress", "userAgent", "expiration", "captureAddress", "skipResult", "noBuyerFill" });
+            this.Load<RedirectRequest>(data, new JArray { "returnUrl", "paymentMethod", "cancelUrl", "ipAddress", "userAgent", "expiration", "captureAddress", "skipResult", "noBuyerFill" });
 
             if (data.ContainsKey("locale"))
             {
@@ -54,7 +55,7 @@ namespace PlacetoPay.Redirection.Message
 
             if (data.ContainsKey("fields"))
             {
-                SetFields(data.GetValue("fields").ToObject<JArray>());
+                this.SetFields<RedirectRequest>(data.GetValue("fields").ToObject<JArray>());
             }
         }
 
@@ -76,7 +77,7 @@ namespace PlacetoPay.Redirection.Message
                 expiration = (DateTime.Now).AddDays(+1).ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
             }
 
-            Load(json, new JArray { "returnUrl", "paymentMethod", "cancelUrl", "ipAddress", "userAgent", "expiration", "captureAddress", "skipResult", "noBuyerFill" });
+            this.Load<RedirectRequest>(json, new JArray { "returnUrl", "paymentMethod", "cancelUrl", "ipAddress", "userAgent", "expiration", "captureAddress", "skipResult", "noBuyerFill" });
 
             if (json.ContainsKey("locale"))
             {
@@ -90,7 +91,7 @@ namespace PlacetoPay.Redirection.Message
 
             if (json.ContainsKey("fields"))
             {
-                SetFields(json.GetValue("fields").ToObject<JArray>());
+                this.SetFields<RedirectRequest>(json.GetValue("fields").ToObject<JArray>());
             }
         }
 

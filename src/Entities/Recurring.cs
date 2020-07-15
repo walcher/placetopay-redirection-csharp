@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -22,7 +23,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Recurring(JObject data)
         {
-            Load(data, new JArray { "periodicity", "interval", "maxPeriods", "notificationUrl" });
+            this.Load<Recurring>(data, new JArray { "periodicity", "interval", "maxPeriods", "notificationUrl" });
 
             if (data.ContainsKey("nextPayment"))
             {
@@ -43,7 +44,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "periodicity", "interval", "maxPeriods", "notificationUrl" });
+            this.Load<Recurring>(json, new JArray { "periodicity", "interval", "maxPeriods", "notificationUrl" });
 
             if (json.ContainsKey("nextPayment"))
             {

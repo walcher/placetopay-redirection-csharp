@@ -6,7 +6,7 @@ namespace PlacetoPay.Redirection.Contracts
     /// <summary>
     /// Class <c>Entity</c>
     /// </summary>
-    public abstract class Entity : LoaderTrait
+    public abstract class Entity
     {
         /// <summary>
         /// ToJsonObject static method.
