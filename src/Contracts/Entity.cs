@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using PlacetoPay.Redirection.Traits;
 
 namespace PlacetoPay.Redirection.Contracts
 {

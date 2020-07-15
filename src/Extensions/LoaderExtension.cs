@@ -14,9 +14,9 @@ namespace PlacetoPay.Redirection.Extensions
         /// <summary>
         /// Set object properties.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="jsonData">JObject.</param>
-        /// <param name="keys">JArray.</param>
+        /// <param name="obj">Object</param>
+        /// <param name="jsonData">JObject</param>
+        /// <param name="keys">JArray</param>
         public static void Load<T>(this object obj, JObject jsonData, JArray keys)
         {
             foreach (string key in keys)

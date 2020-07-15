@@ -13,7 +13,7 @@ namespace PlacetoPay.Redirection.Extensions
         /// <summary>
         /// Set list of fields.
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">Object</param>
         /// <param name="fields">JArray</param>
         public static void SetFields<T>(this object obj, JArray fields)
         {
