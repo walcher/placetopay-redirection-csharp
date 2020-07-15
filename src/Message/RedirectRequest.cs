@@ -312,25 +312,6 @@ namespace PlacetoPay.Redirection.Message
         }
 
         /// <summary>
-        /// Set list of fields.
-        /// </summary>
-        /// <param name="fields">JArray</param>
-        /// <returns>List</returns>
-        //private List<NameValuePair> SetFields(JArray fields)
-        //{
-        //    List<NameValuePair> list = new List<NameValuePair>();
-
-        //    foreach (var field in fields)
-        //    {
-        //        JObject fieldDetail = field.ToObject<JObject>();
-
-        //        list.Add(new NameValuePair(fieldDetail));
-        //    }
-
-        //    return list;
-        //}
-
-        /// <summary>
         /// Json Object sent back from API.
         /// </summary>
         /// <returns>JsonObject</returns>
