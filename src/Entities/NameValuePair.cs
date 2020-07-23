@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -9,6 +10,10 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class NameValuePair : Entity
     {
+        protected const string DISPLAY_ON = "displayOn";
+        protected const string KEYWORD = "keyword";
+        protected const string VALUE = "value";
+
         protected string keyword;
         protected string valueField;
         protected string displayOn = "none";
@@ -19,7 +24,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public NameValuePair(JObject data)
         {
-            Load(data, new JArray { "keyword", "value", "displayOn" });
+            this.Load<NameValuePair>(data, new JArray { KEYWORD, VALUE, DISPLAY_ON });
         }
 
         /// <summary>
@@ -30,7 +35,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "keyword", "value", "displayOn" });
+            this.Load<NameValuePair>(json, new JArray { KEYWORD, VALUE, DISPLAY_ON });
         }
 
         /// <summary>
@@ -79,7 +84,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { KEYWORD, Keyword },
+                { VALUE, Value },
+                { DISPLAY_ON, DisplayOn },
+            });
         }
     }
 }

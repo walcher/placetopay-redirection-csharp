@@ -9,6 +9,10 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Amount : AmountBase
     {
+        protected const string AMOUNT = "amount";
+        protected const string DETAILS = "details";
+        protected const string TAXES = "taxes";
+
         protected List<TaxDetail> taxes;
         protected List<AmountDetail> details;
         protected double taxAmount;
@@ -19,8 +23,8 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Amount(JObject data) : base(data)
         {
-            taxes = data.ContainsKey("taxes") ? SetTaxes(data.GetValue("taxes").ToObject<JArray>()) : null;
-            details = data.ContainsKey("details") ? SetDetails(data.GetValue("details").ToObject<JArray>()) : null;
+            taxes = data.ContainsKey(TAXES) ? SetTaxes(data.GetValue(TAXES).ToObject<JArray>()) : null;
+            details = data.ContainsKey(DETAILS) ? SetDetails(data.GetValue(DETAILS).ToObject<JArray>()) : null;
         }
 
         /// <summary>
@@ -31,8 +35,8 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            taxes = json.ContainsKey("taxes") ? SetTaxes(json.GetValue("taxes").ToObject<JArray>()) : null;
-            details = json.ContainsKey("details") ? SetDetails(json.GetValue("details").ToObject<JArray>()) : null;
+            taxes = json.ContainsKey(TAXES) ? SetTaxes(json.GetValue(TAXES).ToObject<JArray>()) : null;
+            details = json.ContainsKey(DETAILS) ? SetDetails(json.GetValue(DETAILS).ToObject<JArray>()) : null;
         }
 
         /// <summary>
@@ -94,7 +98,7 @@ namespace PlacetoPay.Redirection.Entities
                 JObject taxDetail = tax.ToObject<JObject>();
 
                 list.Add(new TaxDetail(taxDetail));
-                taxAmount += (double)taxDetail.GetValue("amount");
+                taxAmount += (double)taxDetail.GetValue(AMOUNT);
             }
 
             return list;
@@ -120,12 +124,61 @@ namespace PlacetoPay.Redirection.Entities
         }
 
         /// <summary>
+        /// Convert taxes list to json array.
+        /// </summary>
+        /// <returns>JArray</returns>
+        private JArray TaxesToJArray()
+        {
+            JArray taxes = new JArray();
+
+            if (Taxes != null)
+            {
+                foreach (var taxe in Taxes)
+                {
+                    taxes.Add(taxe.ToJsonObject());
+                }
+            }
+
+            return taxes;
+        }
+
+        /// <summary>
+        /// Convert details list to json array.
+        /// </summary>
+        /// <returns>JArray</returns>
+        private JArray DetailsToJArray()
+        {
+            JArray details = new JArray();
+
+            if (Details != null)
+            {
+                foreach (var detail in Details)
+                {
+                    details.Add(detail.ToJsonObject());
+                }
+            }
+
+            return details;
+        }
+
+        /// <summary>
         /// Json Object sent back from API.
         /// </summary>
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            JObject jsonBase = base.ToJsonObject();
+
+            jsonBase.Merge(new JObject
+            {
+                { TAXES, TaxesToJArray() },
+                { DETAILS, DetailsToJArray() },
+            }, new JsonMergeSettings
+            {
+                MergeArrayHandling = MergeArrayHandling.Union
+            });
+
+            return JObjectFilter(jsonBase);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -9,6 +10,9 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Bank : Entity
     {
+        public const string CODE = "code";
+        public const string INTERFACE = "interface";
+        public const string NAME = "name";
         public const int INT_PERSON = 0;
         public const int INT_BUSINESS = 1;
 
@@ -22,7 +26,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Bank(JObject data)
         {
-            Load(data, new JArray { "interface", "code", "name" });
+            this.Load<Bank>(data, new JArray { INTERFACE, CODE, NAME });
         }
 
         /// <summary>
@@ -33,7 +37,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "interface", "code", "name" });
+            this.Load<Bank>(json, new JArray { INTERFACE, CODE, NAME });
         }
 
         /// <summary>
@@ -43,8 +47,8 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="code">string</param>
         /// <param name="name">string</param>
         public Bank(
-            int bankInterface, 
-            string code, 
+            int bankInterface,
+            string code,
             string name
             )
         {
