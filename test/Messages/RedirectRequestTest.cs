@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using PlacetoPay.Redirection.Message;
-using System.IO;
 
 namespace PlacetoPay.RedirectionTests.Messages
 {
@@ -10,7 +9,7 @@ namespace PlacetoPay.RedirectionTests.Messages
     class RedirectRequestTest
     {
         [Test]
-        public void ItParsesCorrectlyAPaymentRequestTest()
+        public void Should_Parse_Correctly_A_Payment_Request()
         {
             string data = JsonConvert.SerializeObject(new
             {
@@ -48,19 +47,7 @@ namespace PlacetoPay.RedirectionTests.Messages
                         state = "Bogota",
                         postalCode = "010012",
                         country = "CO",
-                        phone = "4442311",
-                    },
-                },
-                instrument = new
-                {
-                    card = new
-                    {
-                        number = "4111111111111111",
-                        expirationMonth = "12",
-                        expirationYear = "23",
-                        cvv = "123",
-                        installments = 12,
-                        kind = "C",
+                        phone = "+574442311",
                     },
                 },
                 payment = new
@@ -75,11 +62,6 @@ namespace PlacetoPay.RedirectionTests.Messages
                             {
                                 kind = "valueAddedTax",
                                 amount = 1.9,
-                            },
-                            new
-                            {
-                                kind = "ice",
-                                amount = 1.2,
                             },
                         },
                         details = new[]
@@ -97,18 +79,6 @@ namespace PlacetoPay.RedirectionTests.Messages
                         },
                         currency = "USD",
                         total = 10.283,
-                    },
-                    items = new[]
-                    {
-                        new
-                        {
-                            sku = 66319,
-                            name = "Atque id.",
-                            category = "physical",
-                            qty = 1,
-                            price = 10,
-                            tax = 1.9,
-                        },
                     },
                     recurring = new
                     {
@@ -147,34 +117,93 @@ namespace PlacetoPay.RedirectionTests.Messages
                 noBuyerFill = true,
                 captureAddress = true,
                 paymentMethod = "CR_VS,_ATH_",
-                fields = new[] {
-                    new {
-                        keyword = "Redeem Code",
-                        value = 899404,
-                        displayOn = "payment",
-                    },
-                },
             });
 
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
+            JObject json = JObject.Parse(data);
 
             var request = new RedirectRequest(json);
 
-            Assert.True(true);
+            Assert.AreEqual((string)json["locale"], request.Locale);
+            Assert.AreEqual("EN", request.GetLanguage());
+            Assert.AreEqual((string)json["payment"]["reference"], request.GetReference());
+            Assert.True(request.Payment.AllowPartial);
+            Assert.AreEqual((string)json["returnUrl"], request.ReturnUrl);
+            Assert.AreEqual((string)json["cancelUrl"], request.CancelUrl);
+        }        
+
+        [Test]
+        public void Should_Parse_Correctly_A_Subscription_Request()
+        {
+            string data = JsonConvert.SerializeObject(new
+            {
+                buyer = new
+                {
+                    name = "Sugeis",
+                    surname = "Meza",
+                    email = "sugeis@testing.com",
+                    documentType = "CC",
+                    document = "987654321",
+                    mobile = "3006108301",
+                    address = new
+                    {
+                        street = "Fake street 321",
+                        city = "Bogota",
+                        state = "Bogota",
+                        postalCode = "010012",
+                        country = "CO",
+                        phone = "+574442311",
+                    },
+                },
+                subscription = new
+                {
+                    reference = "Testing_S_2020",
+                    description = "Testing payment for NUnit",
+                },
+                ipAddress = "127.0.0.1",
+                userAgent = "NUnit",
+            });
+
+            JObject json = JObject.Parse(data);
+
+            string additional = JsonConvert.SerializeObject(new
+            {
+                expiration = "2018-05-18T21:42:21+00:00",
+                returnUrl = "http://your-return-url.com",
+                cancelUrl = "http://your-cancel-url.com",
+                skipResult = true,
+                noBuyerFill = true,
+                captureAddress = true,
+                paymentMethod = "CR_VS,_ATH_",
+                userAgent = "NUnit",
+                ipAddress = "127.0.0.12",
+            });
+
+            JObject jsonAdditional = JObject.Parse(additional);
+
+            var request = new RedirectRequest(json);
+
+            request.SetReturnUrl((string)jsonAdditional["returnUrl"])
+                .SetIpAddress((string)jsonAdditional["ipAddress"])
+                .SetUserAgent((string)jsonAdditional["userAgent"])
+                .SetExpiration((string)jsonAdditional["expiration"])
+                .SetCancelUrl((string)jsonAdditional["cancelUrl"]);
+
+            Assert.AreEqual((string)json["subscription"]["reference"], request.GetReference());
+
+            Assert.AreEqual((string)jsonAdditional["returnUrl"], request.ReturnUrl);
+            Assert.AreEqual((string)jsonAdditional["ipAddress"], request.IpAddress);
+            Assert.AreEqual((string)jsonAdditional["userAgent"], request.UserAgent);
+            Assert.AreEqual((string)jsonAdditional["expiration"], request.Expiration);
+            Assert.AreEqual((string)jsonAdditional["cancelUrl"], request.CancelUrl);
         }
 
         [Test]
-        public void ItParsesCorrectlyAPaymentStringRequestTest()
+        public void Should_Parse_Correctly_A_Payment_Request_With_String_Data()
         {
             string test =
             "{  " +
             "   \"payment\":{  " +
-            "      \"reference\":\"TESTING123456\"," +
+            "      \"reference\":\"Testing_S_2020\"," +
             "      \"amount\":{  " +
             "         \"currency\":\"COP\"," +
             "         \"total\":\"10000\"," +
@@ -187,12 +216,14 @@ namespace PlacetoPay.RedirectionTests.Messages
             "         ]" +
             "      }" +
             "   }," +
-            "   \"returnUrl\":\"http:\\/\\/your.url.com\\/return?reference=TESTING123456\"" +
+            "   \"returnUrl\":\"http:\\/\\/your-return-url.com\"" +
             "}";
 
-            var tetero = new RedirectRequest(test);
+            var request = new RedirectRequest(test);
 
-            Assert.True(true);
+            Assert.AreEqual("http://your-return-url.com", request.ReturnUrl);
+            Assert.AreEqual("Testing_S_2020", request.GetReference());
+            Assert.IsNotNull(request.Payment);
         }
     }
 }

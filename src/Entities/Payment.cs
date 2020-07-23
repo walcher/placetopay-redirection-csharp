@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -10,6 +13,21 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Payment : Entity
     {
+        protected const string AGREEMENT = "agreement";
+        protected const string AGREEMENT_TYPE = "agreementType";
+        protected const string ALLOW_PARTIAL = "allowPartial";
+        protected const string AMOUNT = "amount";
+        protected const string DESCRIPTION = "description";
+        protected const string DISCOUNT = "discount";
+        protected const string FIELDS = "fields";
+        protected const string GDS = "gds";
+        protected const string INSTRUMENT = "instrument";
+        protected const string ITEMS = "items";
+        protected const string RECURRING = "recurring";
+        protected const string REFERENCE = "reference";
+        protected const string SHIPPING = "shipping";
+        protected const string SUBSCRIBE = "subscribe";
+
         protected string reference;
         protected string description;
         protected Amount amount;
@@ -19,7 +37,7 @@ namespace PlacetoPay.Redirection.Entities
         protected List<NameValuePair> fields;
         protected Recurring recurring;
         protected string discount;
-        protected string instrument;
+        protected Instrument instrument;
         protected bool subscribe = false;
         protected string agreement;
         protected string agreementType;
@@ -31,19 +49,115 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Payment(JObject data)
         {
-            Load(data, new JArray { "reference", "description", "allowPartial", "subscribe", "agreement", "agreementType" });
+            this.Load<Payment>(data, new JArray { REFERENCE, DESCRIPTION, ALLOW_PARTIAL, SUBSCRIBE, AGREEMENT, AGREEMENT_TYPE });
 
-            amount = data.ContainsKey("amount") ? new Amount(data.GetValue("amount").ToObject<JObject>()) : null;
-            recurring = data.ContainsKey("recurring") ? new Recurring(data.GetValue("recurring").ToObject<JObject>()) : null;
-            shipping = data.ContainsKey("shipping") ? new Person(data.GetValue("shipping").ToObject<JObject>()) : null;
-            items = data.ContainsKey("items") ? SetItem(data.GetValue("items").ToObject<JArray>()) : null;
-
-            if (data.ContainsKey("fields"))
+            if (data.ContainsKey(AMOUNT))
             {
-                SetFields(data.GetValue("fields").ToObject<JArray>());
+                SetAmount(data.GetValue(AMOUNT).ToObject<JObject>());
             }
 
-            gds = data.ContainsKey("gds") ? new GDS(data.GetValue("gds").ToObject<JObject>()) : null;
+            if (data.ContainsKey(RECURRING))
+            {
+                SetRecurring(data.GetValue(RECURRING).ToObject<JObject>());
+            }
+
+            if (data.ContainsKey(SHIPPING))
+            {
+                SetShipping(data.GetValue(SHIPPING).ToObject<JObject>());
+            }
+
+            items = data.ContainsKey(ITEMS) ? SetItem(data.GetValue(ITEMS).ToObject<JArray>()) : null;
+
+            if (data.ContainsKey(FIELDS))
+            {
+                this.SetFields<Payment>(data.GetValue(FIELDS).ToObject<JArray>());
+            }
+
+            gds = data.ContainsKey(GDS) ? new GDS(data.GetValue(GDS).ToObject<JObject>()) : null;
+        }
+
+        /// <summary>
+        /// Payment constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Payment(string data)
+        {
+            JsonReader reader = new JsonTextReader(new StringReader(data))
+            {
+                DateParseHandling = DateParseHandling.None
+            };
+
+            JObject json = JObject.Load(reader);
+
+            this.Load<Payment>(json, new JArray { REFERENCE, DESCRIPTION, ALLOW_PARTIAL, SUBSCRIBE, AGREEMENT, AGREEMENT_TYPE });
+
+            if (json.ContainsKey(AMOUNT))
+            {
+                SetAmount(json.GetValue(AMOUNT).ToObject<JObject>());
+            }
+
+            if (json.ContainsKey(RECURRING))
+            {
+                SetRecurring(json.GetValue(RECURRING).ToObject<JObject>());
+            }
+
+            if (json.ContainsKey(SHIPPING))
+            {
+                SetShipping(json.GetValue(SHIPPING).ToObject<JObject>());
+            }
+
+            items = json.ContainsKey(ITEMS) ? SetItem(json.GetValue(ITEMS).ToObject<JArray>()) : null;
+
+            if (json.ContainsKey(FIELDS))
+            {
+                this.SetFields<Payment>(json.GetValue(FIELDS).ToObject<JArray>());
+            }
+
+            gds = json.ContainsKey(GDS) ? new GDS(json.GetValue(GDS).ToObject<JObject>()) : null;
+        }
+
+        /// <summary>
+        /// Payment constructor.
+        /// </summary>
+        /// <param name="reference">string</param>
+        /// <param name="description">string</param>
+        /// <param name="allowPartial">bool</param>
+        /// <param name="subscribe">bool</param>
+        /// <param name="agreement">string</param>
+        /// <param name="agreementType">string</param>
+        /// <param name="amount">Amount</param>
+        /// <param name="recurring">Recurring</param>
+        /// <param name="shipping">Person</param>
+        /// <param name="items">List of Item</param>
+        /// <param name="fields">List of NameValuePair</param>
+        /// <param name="instrument">Instrument</param>
+        public Payment(
+            string reference,
+            string description,
+            bool allowPartial,
+            bool subscribe,
+            string agreement,
+            string agreementType,
+            Amount amount,
+            Recurring recurring,
+            Person shipping,
+            List<Item> items,
+            List<NameValuePair> fields,
+            Instrument instrument
+            )
+        {
+            this.reference = reference;
+            this.description = description;
+            this.allowPartial = allowPartial;
+            this.subscribe = subscribe;
+            this.agreement = agreement;
+            this.agreementType = agreementType;
+            this.amount = amount;
+            this.recurring = recurring;
+            this.shipping = shipping;
+            this.items = items;
+            this.fields = fields;
+            this.instrument = instrument;
         }
 
         /// <summary>
@@ -157,8 +271,8 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set list of items.
         /// </summary>
-        /// <param name="items"></param>
-        /// <returns></returns>
+        /// <param name="items">JArray</param>
+        /// <returns>List of items</returns>
         private List<Item> SetItem(JArray items)
         {
             List<Item> list = new List<Item>();
@@ -174,12 +288,44 @@ namespace PlacetoPay.Redirection.Entities
         }
 
         /// <summary>
+        /// Convert items list to json array.
+        /// </summary>
+        /// <returns>JArray</returns>
+        private JArray ItemsToJArray()
+        {
+            JArray items = new JArray();
+
+            if (Items != null)
+            {
+                foreach (var item in Items)
+                {
+                    items.Add(item.ToJsonObject());
+                }
+            }
+
+            return items;
+        }
+
+        /// <summary>
         /// Json Object sent back from API.
         /// </summary>
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { REFERENCE, Reference },
+                { DESCRIPTION, Description },
+                { AMOUNT, Amount?.ToJsonObject() },
+                { ALLOW_PARTIAL, AllowPartial },
+                { SHIPPING, Shipping?.ToJsonObject() },
+                { ITEMS, ItemsToJArray() },
+                { RECURRING, Recurring?.ToJsonObject() },
+                { SUBSCRIBE, Subscribe },
+                { FIELDS, this.FieldsToJArray<Payment>() },
+                { AGREEMENT, Agreement },
+                { AGREEMENT_TYPE, AgreementType },
+                { GDS, Gds?.ToJsonObject() },
+            });
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
+using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Validators;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -9,6 +11,13 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Address : Entity
     {
+        protected const string CITY = "city";
+        protected const string COUNTRY = "country";
+        protected const string PHONE = "phone";
+        protected const string POSTAL_CODE = "postalCode";
+        protected const string STATE = "state";
+        protected const string STREET = "street";
+
         protected string street;
         protected string city;
         protected string state;
@@ -22,7 +31,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Address(JObject data)
         {
-            Load(data, new JArray { "street", "city", "state", "postalCode", "phone", "country" });
+            this.Load<Address>(data, new JArray { STREET, CITY, STATE, POSTAL_CODE, PHONE, COUNTRY });
         }
 
         /// <summary>
@@ -33,7 +42,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            Load(json, new JArray { "street", "city", "state", "postalCode", "phone", "country" });
+            this.Load<Address>(json, new JArray { STREET, CITY, STATE, POSTAL_CODE, PHONE, COUNTRY });
         }
 
         /// <summary>
@@ -112,7 +121,7 @@ namespace PlacetoPay.Redirection.Entities
         /// </summary>
         public string Phone
         {
-            get { return phone; }
+            get { return PersonValidator.NormalizePhone(phone); }
             set { phone = value; }
         }
 
@@ -122,7 +131,14 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { STREET, Street },
+                { CITY, City },
+                { STATE, State },
+                { POSTAL_CODE, PostalCode },
+                { COUNTRY, Country },
+                { PHONE, Phone },
+            });
         }
     }
 }

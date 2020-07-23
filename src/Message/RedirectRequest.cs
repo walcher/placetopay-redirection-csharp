@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
+using PlacetoPay.Redirection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,23 @@ namespace PlacetoPay.Redirection.Message
     /// </summary>
     public class RedirectRequest : Entity
     {
+        protected const string BUYER = "buyer";
+        protected const string CANCEL_URL = "cancelUrl";
+        protected const string CAPTURE_ADDRESS = "captureAddress";
+        protected const string DATE_FORMAT = "yyyy-MM-ddTHH\\:mm\\:sszzz";
+        protected const string EXPIRATION = "expiration";
+        protected const string FIELDS = "fields";
+        protected const string IP_ADDRESS = "ipAddress";
+        protected const string LOCALE = "locale";
+        protected const string NO_BUYER_FILL = "noBuyerFill";
+        protected const string PAYER = "payer";
+        protected const string PAYMENT = "payment";
+        protected const string PAYMENT_METHOD = "paymentMethod";
+        protected const string RETURN_URL = "returnUrl";
+        protected const string SKIP_RESULT = "skipResult";
+        protected const string SUBSCRIPTION = "subscription";
+        protected const string USER_AGENT = "userAgent";
+
         protected string locale = "es_CO";
         protected Person payer;
         protected Person buyer;
@@ -35,26 +53,41 @@ namespace PlacetoPay.Redirection.Message
         /// <param name="data">JObject</param>
         public RedirectRequest(JObject data)
         {
-            if (!data.ContainsKey("expiration"))
+            if (!data.ContainsKey(EXPIRATION))
             {
-                expiration = (DateTime.Now).AddDays(+1).ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
+                expiration = (DateTime.Now).AddDays(+1).ToString(DATE_FORMAT);
             }
 
-            Load(data, new JArray { "returnUrl", "paymentMethod", "cancelUrl", "ipAddress", "userAgent", "expiration", "captureAddress", "skipResult", "noBuyerFill" });
+            this.Load<RedirectRequest>(data, new JArray { RETURN_URL, PAYMENT_METHOD, CANCEL_URL, IP_ADDRESS, USER_AGENT, EXPIRATION, CAPTURE_ADDRESS, SKIP_RESULT, NO_BUYER_FILL });
 
-            if (data.ContainsKey("locale"))
+            if (data.ContainsKey(LOCALE))
             {
-                locale = (string)data.GetValue("locale");
+                locale = (string)data.GetValue(LOCALE);
             }
 
-            payer = data.ContainsKey("payer") ? new Person(data.GetValue("payer").ToObject<JObject>()) : null;
-            buyer = data.ContainsKey("buyer") ? new Person(data.GetValue("buyer").ToObject<JObject>()) : null;
-            payment = data.ContainsKey("payment") ? new Payment(data.GetValue("payment").ToObject<JObject>()) : null;
-            subscription = data.ContainsKey("subscription") ? new Subscription(data.GetValue("subscription").ToObject<JObject>()) : null;
-
-            if (data.ContainsKey("fields"))
+            if (data.ContainsKey(PAYER))
             {
-                SetFields(data.GetValue("fields").ToObject<JArray>());
+                SetPayer(data.GetValue(PAYER).ToObject<JObject>());
+            }
+
+            if (data.ContainsKey(BUYER))
+            {
+                SetBuyer(data.GetValue(BUYER).ToObject<JObject>());
+            }
+
+            if (data.ContainsKey(PAYMENT))
+            {
+                SetPayment(data.GetValue(PAYMENT).ToObject<JObject>());
+            }
+
+            if (data.ContainsKey(SUBSCRIPTION))
+            {
+                SetSubscription(data.GetValue(SUBSCRIPTION).ToObject<JObject>());
+            }
+
+            if (data.ContainsKey(FIELDS))
+            {
+                this.SetFields<RedirectRequest>(data.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 
@@ -71,26 +104,38 @@ namespace PlacetoPay.Redirection.Message
 
             JObject json = JObject.Load(reader);
 
-            if (!json.ContainsKey("expiration"))
+            if (!json.ContainsKey(EXPIRATION))
             {
-                expiration = (DateTime.Now).AddDays(+1).ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
+                expiration = (DateTime.Now).AddDays(+1).ToString(DATE_FORMAT);
             }
 
-            Load(json, new JArray { "returnUrl", "paymentMethod", "cancelUrl", "ipAddress", "userAgent", "expiration", "captureAddress", "skipResult", "noBuyerFill" });
+            this.Load<RedirectRequest>(json, new JArray { RETURN_URL, PAYMENT_METHOD, CANCEL_URL, IP_ADDRESS, USER_AGENT, EXPIRATION, CAPTURE_ADDRESS, SKIP_RESULT, NO_BUYER_FILL });
 
-            if (json.ContainsKey("locale"))
+            if (json.ContainsKey(LOCALE))
             {
-                locale = (string)json.GetValue("locale");
+                locale = (string)json.GetValue(LOCALE);
             }
 
-            payer = json.ContainsKey("payer") ? new Person(json.GetValue("payer").ToObject<JObject>()) : null;
-            buyer = json.ContainsKey("buyer") ? new Person(json.GetValue("buyer").ToObject<JObject>()) : null;
-            payment = json.ContainsKey("payment") ? new Payment(json.GetValue("payment").ToObject<JObject>()) : null;
-            subscription = json.ContainsKey("subscription") ? new Subscription(json.GetValue("subscription").ToObject<JObject>()) : null;
-
-            if (json.ContainsKey("fields"))
+            if (json.ContainsKey(PAYER))
             {
-                SetFields(json.GetValue("fields").ToObject<JArray>());
+                SetPayer(json.GetValue(PAYER).ToObject<JObject>());
+            }
+
+            if (json.ContainsKey(BUYER))
+            {
+                SetBuyer(json.GetValue(BUYER).ToObject<JObject>());
+            }
+
+            if (json.ContainsKey(PAYMENT))
+            {
+                SetPayment(json.GetValue(PAYMENT).ToObject<JObject>());
+            }
+
+            subscription = json.ContainsKey(SUBSCRIPTION) ? new Subscription(json.GetValue(SUBSCRIPTION).ToObject<JObject>()) : null;
+
+            if (json.ContainsKey(FIELDS))
+            {
+                this.SetFields<RedirectRequest>(json.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 
@@ -303,32 +348,119 @@ namespace PlacetoPay.Redirection.Message
         }
 
         /// <summary>
+        /// Set locale data.
+        /// </summary>
+        /// <param name="locale">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetLocale(string locale)
+        {
+            this.locale = locale;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set subscription data.
+        /// </summary>
+        /// <param name="subscription">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetSubscription(JObject subscription)
+        {
+            if (subscription is JObject)
+            {
+                this.subscription = new Subscription(subscription);
+            }
+
+            if (!(this.subscription.GetType() == typeof(Subscription)))
+            {
+                this.subscription = null;
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set return url data.
+        /// </summary>
+        /// <param name="returnUrl">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetReturnUrl(string returnUrl)
+        {
+            this.returnUrl = returnUrl;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set cancel url data.
+        /// </summary>
+        /// <param name="cancelUrl">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetCancelUrl(string cancelUrl)
+        {
+            this.cancelUrl = cancelUrl;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set expiration data.
+        /// </summary>
+        /// <param name="expiration">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetExpiration(string expiration)
+        {
+            this.expiration = expiration;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set user agent data.
+        /// </summary>
+        /// <param name="userAgent">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetUserAgent(string userAgent)
+        {
+            this.userAgent = userAgent;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set ip address data.
+        /// </summary>
+        /// <param name="ipAddress">string</param>
+        /// <returns>RedirectRequest</returns>
+        public RedirectRequest SetIpAddress(string ipAddress)
+        {
+            this.ipAddress = ipAddress;
+
+            return this;
+        }
+
+        /// <summary>
         /// Get language.
         /// </summary>
         /// <returns></returns>
-        public string Language()
+        public string GetLanguage()
         {
             return locale.Substring(0, 2).ToUpper();
         }
 
         /// <summary>
-        /// Set list of fields.
+        /// Get payment/subscription reference.
         /// </summary>
-        /// <param name="fields">JArray</param>
-        /// <returns>List</returns>
-        //private List<NameValuePair> SetFields(JArray fields)
-        //{
-        //    List<NameValuePair> list = new List<NameValuePair>();
+        /// <returns>string</returns>
+        public string GetReference()
+        {
+            if (Payment != null)
+            {
+                return Payment.Reference;
+            }
 
-        //    foreach (var field in fields)
-        //    {
-        //        JObject fieldDetail = field.ToObject<JObject>();
-
-        //        list.Add(new NameValuePair(fieldDetail));
-        //    }
-
-        //    return list;
-        //}
+            return Subscription.Reference;
+        }
 
         /// <summary>
         /// Json Object sent back from API.
@@ -336,10 +468,24 @@ namespace PlacetoPay.Redirection.Message
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            return new JObject
+            return JObjectFilter(new JObject
             {
-                { "locale", locale }
-            };
+                { LOCALE, Locale },
+                { PAYER, Payer?.ToJsonObject() },
+                { BUYER, Buyer?.ToJsonObject() },
+                { PAYMENT, Payment?.ToJsonObject() },
+                { SUBSCRIPTION, Subscription?.ToJsonObject() },
+                { FIELDS, this.FieldsToJArray<RedirectRequest>() },
+                { RETURN_URL, ReturnUrl },
+                { PAYMENT_METHOD, PaymentMethod },
+                { CANCEL_URL, CancelUrl },
+                { IP_ADDRESS, IpAddress },
+                { USER_AGENT, UserAgent },
+                { EXPIRATION, Expiration },
+                { CAPTURE_ADDRESS, CaptureAddress },
+                { SKIP_RESULT, SkipResult },
+                { NO_BUYER_FILL, NoBuyerFill },
+            });
         }
     }
 }
