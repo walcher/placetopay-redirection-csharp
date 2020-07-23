@@ -225,5 +225,28 @@ namespace PlacetoPay.RedirectionTests.Messages
             Assert.AreEqual("Testing_S_2020", request.GetReference());
             Assert.IsNotNull(request.Payment);
         }
+
+        [Test]
+        public void Should_Parse_Correctly_A_Payment_Request_With_Object_Instance()
+        {
+            var request = new RedirectRequest(null, null, null, "http://your-return-url.com", "CR_VS");
+
+            Assert.IsNull(request.Payer);
+            Assert.AreEqual("http://your-return-url.com", request.ReturnUrl);
+            Assert.AreEqual("CR_VS", request.PaymentMethod);            
+        }
+
+        [Test]
+        public void Should_Parse_Correctly_A_Payment_Request_With_Full_Object_Instance()
+        {
+            var request = new RedirectRequest(null, null, null, null, "http://your-return-url.com", "CR_VS", null, null, null, null, false, false, false, null);
+
+            Assert.IsNull(request.Fields);
+            Assert.AreEqual("http://your-return-url.com", request.ReturnUrl);
+            Assert.AreEqual("CR_VS", request.PaymentMethod);
+            Assert.False(request.CaptureAddress);
+            Assert.False(request.NoBuyerFill);
+            Assert.False(request.SkipResult);
+        }
     }
 }
