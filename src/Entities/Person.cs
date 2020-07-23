@@ -10,6 +10,15 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Person : Entity
     {
+        protected const string ADDRESS = "address";
+        protected const string COMPANY = "company";
+        protected const string DOCUMENT = "document";
+        protected const string DOCUMENT_TYPE = "documentType";
+        protected const string EMAIL = "email";
+        protected const string MOBILE = "mobile";
+        protected const string NAME = "name";
+        protected const string SURNAME = "surname";
+
         protected string document;
         protected string documentType;
         protected string name;
@@ -25,9 +34,12 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Person(JObject data)
         {
-            this.Load<Person>(data, new JArray { "document", "documentType", "name", "surname", "company", "email", "mobile" });
+            this.Load<Person>(data, new JArray { DOCUMENT, DOCUMENT_TYPE, NAME, SURNAME, COMPANY, EMAIL, MOBILE });
 
-            address = data.ContainsKey("address") ? new Address(data.GetValue("address").ToObject<JObject>()) : null;
+            if (data.ContainsKey(ADDRESS))
+            {
+                SetAddress(data.GetValue(ADDRESS).ToObject<JObject>());
+            }
         }
 
         /// <summary>
@@ -38,9 +50,12 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<Person>(json, new JArray { "document", "documentType", "name", "surname", "company", "email", "mobile" });
+            this.Load<Person>(json, new JArray { DOCUMENT, DOCUMENT_TYPE, NAME, SURNAME, COMPANY, EMAIL, MOBILE });
 
-            address = json.ContainsKey("address") ? new Address(json.GetValue("address").ToObject<JObject>()) : null;
+            if (json.ContainsKey(ADDRESS))
+            {
+                SetAddress(json.GetValue(ADDRESS).ToObject<JObject>());
+            }
         }
 
         /// <summary>
@@ -54,7 +69,16 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="email">string</param>
         /// <param name="address">Address</param>
         /// <param name="mobile">string</param>
-        public Person(string document, string documentType, string name, string surname, string company, string email, Address address, string mobile)
+        public Person(
+            string document,
+            string documentType,
+            string name,
+            string surname,
+            string company,
+            string email,
+            Address address,
+            string mobile
+            )
         {
             this.document = document;
             this.documentType = documentType;
@@ -144,7 +168,16 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { DOCUMENT, Document },
+                { DOCUMENT_TYPE, DocumentType },
+                { NAME, Name },
+                { SURNAME, Surname },
+                { EMAIL, Email },
+                { MOBILE, Mobile },
+                { COMPANY, Company },
+                { ADDRESS, Address?.ToJsonObject() },
+            });
         }
     }
 }

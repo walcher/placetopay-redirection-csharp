@@ -10,6 +10,13 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Card : Entity
     {
+        public const string CVV = "cvv";
+        public const string EXPIRATION_MONTH = "expirationMonth";
+        public const string EXPIRATION_YEAR = "expirationYear";
+        public const string INSTALLMENTS = "installments";
+        public const string KIND = "kind";
+        public const string NAME = "name";
+        public const string NUMBER = "number";
         public const string TP_CREDIT = "C";
         public const string TP_DEBIT_SAVINGS = "A";
         public const string TP_DEBIT_CURRENT = "R";
@@ -28,7 +35,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Card(JObject data)
         {
-            this.Load<Card>(data, new JArray { "name", "number", "expirationMonth", "expirationYear", "installments", "kind", "cvv" });
+            this.Load<Card>(data, new JArray { NAME, NUMBER, EXPIRATION_MONTH, EXPIRATION_YEAR, INSTALLMENTS, KIND, CVV });
         }
 
         /// <summary>
@@ -39,7 +46,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<Card>(json, new JArray { "name", "number", "expirationMonth", "expirationYear", "installments", "kind", "cvv" });
+            this.Load<Card>(json, new JArray { NAME, NUMBER, EXPIRATION_MONTH, EXPIRATION_YEAR, INSTALLMENTS, KIND, CVV });
         }
 
         /// <summary>

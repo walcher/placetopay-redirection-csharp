@@ -11,6 +11,10 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Subscription : Entity
     {
+        protected const string DESCRIPTION = "description";
+        protected const string FIELDS = "fields";
+        protected const string REFERENCE = "reference";
+
         protected string reference;
         protected string description;
         protected List<NameValuePair> fields;
@@ -21,11 +25,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Subscription(JObject data)
         {
-            this.Load<Subscription>(data, new JArray { "reference", "description" });
+            this.Load<Subscription>(data, new JArray { REFERENCE, DESCRIPTION });
 
-            if (data.ContainsKey("fields"))
+            if (data.ContainsKey(FIELDS))
             {
-                this.SetFields<Subscription>(data.GetValue("fields").ToObject<JArray>());
+                this.SetFields<Subscription>(data.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 
@@ -37,11 +41,11 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<Subscription>(json, new JArray { "reference", "description" });
+            this.Load<Subscription>(json, new JArray { REFERENCE, DESCRIPTION });
 
-            if (json.ContainsKey("fields"))
+            if (json.ContainsKey(FIELDS))
             {
-                this.SetFields<Subscription>(json.GetValue("fields").ToObject<JArray>());
+                this.SetFields<Subscription>(json.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 
@@ -95,7 +99,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject { 
+                { REFERENCE, Reference },
+                { DESCRIPTION, Description },
+                { FIELDS, this.FieldsToJArray<Subscription>() },
+            });
         }
     }
 }

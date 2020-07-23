@@ -10,6 +10,14 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Recurring : Entity
     {
+        protected const string DATE_FORMAT = "yyyy-MM-dd";
+        protected const string DUE_DATE = "dueDate";
+        protected const string INTERVAL = "interval";
+        protected const string MAX_PERIODS = "maxPeriods";
+        protected const string NEXT_PAYMENT = "nextPayment";
+        protected const string NOTIFICATION_URL = "notificationUrl";
+        protected const string PERIODICITY = "periodicity";
+
         protected string periodicity;
         protected int interval;
         protected string nextPayment;
@@ -23,16 +31,16 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Recurring(JObject data)
         {
-            this.Load<Recurring>(data, new JArray { "periodicity", "interval", "maxPeriods", "notificationUrl" });
+            this.Load<Recurring>(data, new JArray { PERIODICITY, INTERVAL, MAX_PERIODS, NOTIFICATION_URL });
 
-            if (data.ContainsKey("nextPayment"))
+            if (data.ContainsKey(NEXT_PAYMENT))
             {
-                nextPayment = DateTime.Parse((string)data.GetValue("nextPayment")).ToString("yyyy-MM-dd");
+                nextPayment = DateTime.Parse((string)data.GetValue(NEXT_PAYMENT)).ToString(DATE_FORMAT);
             }
 
-            if (data.ContainsKey("dueDate"))
+            if (data.ContainsKey(DUE_DATE))
             {
-                dueDate = DateTime.Parse((string)data.GetValue("dueDate")).ToString("yyyy-MM-dd");
+                dueDate = DateTime.Parse((string)data.GetValue(DUE_DATE)).ToString(DATE_FORMAT);
             }
         }
 
@@ -44,16 +52,16 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<Recurring>(json, new JArray { "periodicity", "interval", "maxPeriods", "notificationUrl" });
+            this.Load<Recurring>(json, new JArray { PERIODICITY, INTERVAL, MAX_PERIODS, NOTIFICATION_URL });
 
-            if (json.ContainsKey("nextPayment"))
+            if (json.ContainsKey(NEXT_PAYMENT))
             {
-                nextPayment = DateTime.Parse((string)json.GetValue("nextPayment")).ToString("Y-m-d");
+                nextPayment = DateTime.Parse((string)json.GetValue(NEXT_PAYMENT)).ToString(DATE_FORMAT);
             }
 
-            if (json.ContainsKey("dueDate"))
+            if (json.ContainsKey(DUE_DATE))
             {
-                dueDate = DateTime.Parse((string)json.GetValue("dueDate")).ToString("Y-m-d");
+                dueDate = DateTime.Parse((string)json.GetValue(DUE_DATE)).ToString(DATE_FORMAT);
             }
         }
 
@@ -143,7 +151,14 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { PERIODICITY, Periodicity},
+                { INTERVAL, Interval },
+                { NEXT_PAYMENT, NextPayment },
+                { MAX_PERIODS, MaxPeriods },
+                { DUE_DATE, DueDate },
+                { NOTIFICATION_URL, NotificationUrl },
+            });
         }
     }
 }

@@ -10,6 +10,10 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class TaxDetail : Entity
     {
+        protected const string AMOUNT = "amount";
+        protected const string BASE = "base";
+        protected const string KIND = "kind";
+
         protected string kind;
         protected double amount;
         protected double baseAmount;
@@ -20,7 +24,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public TaxDetail(JObject data)
         {
-            this.Load<TaxDetail>(data, new JArray { "kind", "amount", "base" });
+            this.Load<TaxDetail>(data, new JArray { KIND, AMOUNT, BASE });
         }
 
         /// <summary>
@@ -31,7 +35,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<TaxDetail>(json, new JArray { "kind", "amount", "base" });
+            this.Load<TaxDetail>(json, new JArray { KIND, AMOUNT, BASE });
         }
 
         /// <summary>
@@ -81,7 +85,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { KIND, Kind } ,
+                { AMOUNT, Amount },
+                { BASE, Base },
+            });
         }
     }
 }

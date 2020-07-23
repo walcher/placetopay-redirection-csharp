@@ -10,6 +10,13 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class Item : Entity
     {
+        protected const string CATEGORY = "category";
+        protected const string NAME = "name";
+        protected const string PRICE = "price";
+        protected const string QTY = "qty";
+        protected const string SKU = "sku";
+        protected const string TAX = "tax";
+
         protected string sku;
         protected string name;
         protected string category;
@@ -23,7 +30,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Item(JObject data)
         {
-            this.Load<Item>(data, new JArray { "sku", "name", "category", "qty", "price", "tax" });
+            this.Load<Item>(data, new JArray { SKU, NAME, CATEGORY, QTY, PRICE, TAX });
         }
 
         /// <summary>
@@ -34,7 +41,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<Item>(json, new JArray { "sku", "name", "category", "qty", "price", "tax" });
+            this.Load<Item>(json, new JArray { SKU, NAME, CATEGORY, QTY, PRICE, TAX });
         }
 
         /// <summary>
@@ -123,7 +130,14 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { SKU, Sku },
+                { NAME, Name },
+                { CATEGORY, Category },
+                { QTY, Qty },
+                { PRICE, Price },
+                { TAX, Tax },
+            });
         }
     }
 }

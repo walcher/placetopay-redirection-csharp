@@ -2,11 +2,16 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
 using System;
+using System.Linq;
 
 namespace PlacetoPay.Redirection.Entities
 {
     public class Status : Entity
     {
+        protected const string DATE = "date";
+        protected const string MESSAGE = "message";
+        protected const string REASON = "reason";
+        protected const string STATUS = "status";
         public const string ST_OK = "OK";
         public const string ST_FAILED = "FAILED";
         public const string ST_APPROVED = "APPROVED";
@@ -42,7 +47,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public Status(JObject data)
         {
-            this.Load<Status>(data, new JArray { "status", "reason", "message", "date" });
+            this.Load<Status>(data, new JArray { STATUS, REASON, MESSAGE, DATE });
         }
 
         /// <summary>
@@ -53,7 +58,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<Status>(json, new JArray { "status", "reason", "message", "date" });
+            this.Load<Status>(json, new JArray { STATUS, REASON, MESSAGE, DATE });
         }
 
         /// <summary>
@@ -93,9 +98,100 @@ namespace PlacetoPay.Redirection.Entities
             this.message = message;
         }
 
-        public string GetStatus()
+        /// <summary>
+        /// StatusText property.
+        /// </summary>
+        public string StatusText
         {
-            return status;
+            get { return status; }
+            set { status = value; }
+        }
+
+        /// <summary>
+        /// Reason property.
+        /// </summary>
+        public string Reason
+        {
+            get { return reason; }
+            set { reason = value; }
+        }
+
+        /// <summary>
+        /// Message property.
+        /// </summary>
+        public string Message
+        {
+            get { return message; }
+            set { message = value; }
+        }
+
+        /// <summary>
+        /// Date property.
+        /// </summary>
+        public string Date
+        {
+            get { return date; }
+            set { date = value; }
+        }
+
+        /// <summary>
+        /// Check if is failed.
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool IsFailed()
+        {
+            return StatusText == ST_FAILED;
+        }
+
+        /// <summary>
+        /// Check if is successful.
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool IsSuccessful()
+        {
+            return StatusText == ST_OK;
+        }
+
+        /// <summary>
+        /// Check if is approved.
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool IsApproved()
+        {
+            return StatusText == ST_APPROVED;
+        }
+
+        /// <summary>
+        /// Check if is rejected.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsRejected()
+        {
+            return StatusText == ST_REJECTED;
+        }
+
+        /// <summary>
+        /// Check if is an error.
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool IsError()
+        {
+            return StatusText == ST_ERROR;
+        }
+
+        /// <summary>
+        /// Check if is an valid status.
+        /// </summary>
+        /// <param name="status">string</param>
+        /// <returns>bool</returns>
+        public static bool ValidStatus(string status = null)
+        {
+            if (status != null)
+            {
+                return STATUSES.Contains(status);
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -104,7 +200,12 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { STATUS, StatusText },
+                { REASON, Reason },
+                { MESSAGE, Message },
+                { DATE, Date },
+            });
         }
     }
 }

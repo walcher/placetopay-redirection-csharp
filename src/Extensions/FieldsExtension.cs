@@ -10,6 +10,8 @@ namespace PlacetoPay.Redirection.Extensions
     /// </summary>
     public static class FieldsExtension
     {
+        private const string FIELDS_PROPERTY = "Fields";
+
         /// <summary>
         /// Set list of fields.
         /// </summary>
@@ -26,8 +28,31 @@ namespace PlacetoPay.Redirection.Extensions
                 list.Add(new NameValuePair(fieldDetail));
             }
 
-            PropertyInfo propertyInfo = obj.GetType().GetProperty("Fields");
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(FIELDS_PROPERTY);
             propertyInfo.SetValue(obj, list);
+        }
+
+        /// <summary>
+        /// Convert fields list to json array.
+        /// </summary>
+        /// <typeparam name="T">parent class</typeparam>
+        /// <param name="obj">object</param>
+        /// <returns>JArray</returns>
+        public static JArray FieldsToJArray<T>(this object obj)
+        {
+            JArray fields = new JArray();
+            PropertyInfo propertyInfo = obj.GetType().GetProperty(FIELDS_PROPERTY);
+            List<NameValuePair> list = (List<NameValuePair>)propertyInfo.GetValue(obj);
+
+            if (list != null)
+            {
+                foreach (var data in list)
+                {
+                    fields.Add(data.ToJsonObject());
+                }
+            }
+
+            return fields;
         }
     }
 }

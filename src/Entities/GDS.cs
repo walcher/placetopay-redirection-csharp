@@ -10,6 +10,11 @@ namespace PlacetoPay.Redirection.Entities
     /// </summary>
     public class GDS : Entity
     {
+        protected const string AIRLINE = "airline";
+        protected const string CODE = "code";
+        protected const string PNR = "pnr";
+        protected const string SESSION = "session";
+
         protected string code;
         protected string session;
         protected string pnr;
@@ -21,7 +26,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">JObject</param>
         public GDS(JObject data)
         {
-            this.Load<GDS>(data, new JArray { "code", "session", "pnr", "airline" });
+            this.Load<GDS>(data, new JArray { CODE, SESSION, PNR, AIRLINE });
         }
 
         /// <summary>
@@ -32,7 +37,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             JObject json = JObject.Parse(data);
 
-            this.Load<GDS>(json, new JArray { "code", "session", "pnr", "airline" });
+            this.Load<GDS>(json, new JArray { CODE, SESSION, PNR, AIRLINE });
         }
 
         /// <summary>
@@ -97,7 +102,12 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { CODE, Code },
+                { SESSION, Session },
+                { PNR, Pnr },
+                { AIRLINE, Airline },
+            });
         }
     }
 }
