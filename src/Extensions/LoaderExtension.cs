@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Helpers;
+using System.IO;
 using System.Reflection;
 
 namespace PlacetoPay.Redirection.Extensions
@@ -21,7 +23,13 @@ namespace PlacetoPay.Redirection.Extensions
             {
                 if (jsonData.ContainsKey(StringFormatter.NormalizeProperty(key)))
                 {
-                    JObject data = JObject.Parse(jsonData.ToString());
+                    JsonReader reader = new JsonTextReader(new StringReader(jsonData.ToString()))
+                    {
+                        DateParseHandling = DateParseHandling.None
+                    };
+
+                    JObject data = JObject.Load(reader);
+
                     PropertyInfo propertyInfo = obj.GetType().GetProperty(StringFormatter.ToPascalCase(key));
                     JToken value = data.GetValue(StringFormatter.NormalizeProperty(key));
 
