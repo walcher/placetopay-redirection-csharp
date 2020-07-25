@@ -1,8 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.IO;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -30,12 +27,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">string</param>
         public DispersionPayment(string data) : base(data)
         {
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
+            JObject json = JObject.Parse(data);
 
             dispersion = json.ContainsKey(DISPERSION) ? SetDispersion(json.GetValue(DISPERSION).ToObject<JArray>()) : null;
         }

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
+using PlacetoPay.Redirection.Helpers;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -85,11 +85,13 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            return JObjectFilter(new JObject {
-                { KIND, Kind } ,
-                { AMOUNT, Amount },
-                { BASE, Base },
-            });
+            return JObjectFilter(
+                NumberFormatter.NormalizeNumber(new JObject {
+                    { KIND, Kind } ,
+                    { AMOUNT, Amount },
+                    { BASE, Base },
+                })
+            );
         }
     }
 }

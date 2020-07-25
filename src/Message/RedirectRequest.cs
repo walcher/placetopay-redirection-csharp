@@ -97,12 +97,7 @@ namespace PlacetoPay.Redirection.Message
         /// <param name="data">string</param>
         public RedirectRequest(string data)
         {
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
+            JObject json = JObject.Parse(data);
 
             if (!json.ContainsKey(EXPIRATION))
             {
