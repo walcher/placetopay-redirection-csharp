@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -11,7 +12,7 @@ namespace PlacetoPay.Redirection.Entities
     public class Token : Entity
     {
         protected const string STATUS = "status";
-        protected const string TOKEN = "token";
+        protected const string TOKEN = "tokenText";
         protected const string SUBTOKEN = "subtoken";
         protected const string FRANCHISE = "franchise";
         protected const string FRANCHISE_NAME = "franchiseName";
@@ -217,7 +218,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             return JObjectFilter(new JObject {
                 { STATUS, Status?.ToJsonObject() },
-                { TOKEN, TokenText },
+                { StringFormatter.NormalizeProperty(TOKEN), TokenText },
                 { SUBTOKEN, Subtoken },
                 { FRANCHISE, Franchise },
                 { FRANCHISE_NAME, FranchiseName },

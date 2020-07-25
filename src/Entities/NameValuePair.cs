@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
 
 namespace PlacetoPay.Redirection.Entities
 {

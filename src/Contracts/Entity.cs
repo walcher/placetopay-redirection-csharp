@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Helpers;
-using System.Linq;
 using System.Reflection;
 
 namespace PlacetoPay.Redirection.Contracts
@@ -324,7 +323,7 @@ namespace PlacetoPay.Redirection.Contracts
         /// <returns>JObject</returns>
         public static JObject JObjectFilter(JObject data)
         {
-            string json = JsonFormatter.RemoveEmptyChildren(JToken.Parse(data.ToString())).ToString();
+            string json = JsonFormatter.RemoveNullOrEmpty(JToken.Parse(data.ToString())).ToString();
 
             return JObject.Parse(json);
         }

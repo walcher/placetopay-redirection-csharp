@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -82,12 +79,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data">string</param>
         public Payment(string data)
         {
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
+            JObject json = JObject.Parse(data);
 
             this.Load<Payment>(json, new JArray { REFERENCE, DESCRIPTION, ALLOW_PARTIAL, SUBSCRIBE, AGREEMENT, AGREEMENT_TYPE });
 

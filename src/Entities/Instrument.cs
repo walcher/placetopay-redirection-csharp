@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
-using System.IO;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -61,12 +58,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <param name="data"></param>
         public Instrument(string data)
         {
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
+            JObject json = JObject.Parse(data);
 
             this.Load<Instrument>(json, new JArray { PIN, PASSWORD });
 
@@ -177,7 +169,14 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { BANK, Bank?.ToJsonObject() },
+                { CARD, Card?.ToJsonObject() },
+                { CREDIT, Credit?.ToJsonObject() },
+                { TOKEN, Token?.ToJsonObject() },
+                { PIN, Pin },
+                { PASSWORD, Password },
+            });
         }
     }
 }
