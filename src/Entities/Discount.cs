@@ -110,7 +110,7 @@ namespace PlacetoPay.Redirection.Entities
             set { percent = value; }
         }
 
-        // <summary>
+        /// <summary>
         /// Json Object sent back from API.
         /// </summary>
         /// <returns>JsonObject</returns>
