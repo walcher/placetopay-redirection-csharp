@@ -37,6 +37,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Token constructor.
         /// </summary>
+        public Token() { }
+
+        /// <summary>
+        /// Token constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Token(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Token constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Token(JObject data)
         {
@@ -45,22 +56,6 @@ namespace PlacetoPay.Redirection.Entities
             if (data.ContainsKey(STATUS))
             {
                 SetToken(data.GetValue(STATUS).ToObject<JObject>());
-            }
-        }
-
-        /// <summary>
-        /// Token constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public Token(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Token>(json, new JArray { TOKEN, SUBTOKEN, FRANCHISE, FRANCHISE_NAME, ISSUER_NAME, LAST_DIGITS, VALID_UNTIL, CVV, INSTALLMENTS });
-
-            if (json.ContainsKey(STATUS))
-            {
-                SetToken(json.GetValue(STATUS).ToObject<JObject>());
             }
         }
 

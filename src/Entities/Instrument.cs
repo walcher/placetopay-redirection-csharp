@@ -26,6 +26,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Instrument constructor.
         /// </summary>
+        public Instrument() { }
+
+        /// <summary>
+        /// Instrument constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Instrument(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Instrument constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Instrument(JObject data)
         {
@@ -49,37 +60,6 @@ namespace PlacetoPay.Redirection.Entities
             if (data.ContainsKey(TOKEN))
             {
                 SetToken(data.GetValue(TOKEN).ToObject<JObject>());
-            }
-        }
-
-        /// <summary>
-        /// Instrument constructor.
-        /// </summary>
-        /// <param name="data"></param>
-        public Instrument(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Instrument>(json, new JArray { PIN, PASSWORD });
-
-            if (json.ContainsKey(BANK))
-            {
-                SetBank(json.GetValue(BANK).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(CARD))
-            {
-                SetCard(json.GetValue(CARD).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(CREDIT))
-            {
-                SetCredit(json.GetValue(CREDIT).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(TOKEN))
-            {
-                SetToken(json.GetValue(TOKEN).ToObject<JObject>());
             }
         }
 

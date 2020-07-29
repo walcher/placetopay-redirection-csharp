@@ -2,7 +2,6 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
-using System;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -20,21 +19,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// AmountDetail constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public AmountDetail(JObject data)
-        {
-            this.Load<AmountDetail>(data, new JArray { KIND, AMOUNT });
-        }
+        public AmountDetail() { }
 
         /// <summary>
         /// AmountDetail constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public AmountDetail(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public AmountDetail(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<AmountDetail>(json, new JArray { KIND, AMOUNT });
+        /// <summary>
+        /// AmountDetail constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public AmountDetail(JObject data)
+        {
+            this.Load<AmountDetail>(data, new JArray { KIND, AMOUNT });
         }
 
         /// <summary>

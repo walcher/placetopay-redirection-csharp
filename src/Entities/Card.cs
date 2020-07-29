@@ -31,21 +31,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Card constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Card(JObject data)
-        {
-            this.Load<Card>(data, new JArray { NAME, NUMBER, EXPIRATION_MONTH, EXPIRATION_YEAR, INSTALLMENTS, KIND, CVV });
-        }
+        public Card() { }
 
         /// <summary>
         /// Card constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Card(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public Card(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<Card>(json, new JArray { NAME, NUMBER, EXPIRATION_MONTH, EXPIRATION_YEAR, INSTALLMENTS, KIND, CVV });
+        /// <summary>
+        /// Card constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Card(JObject data)
+        {
+            this.Load<Card>(data, new JArray { NAME, NUMBER, EXPIRATION_MONTH, EXPIRATION_YEAR, INSTALLMENTS, KIND, CVV });
         }
 
         /// <summary>

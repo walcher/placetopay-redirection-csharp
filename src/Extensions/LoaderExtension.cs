@@ -33,9 +33,17 @@ namespace PlacetoPay.Redirection.Extensions
                     PropertyInfo propertyInfo = obj.GetType().GetProperty(StringFormatter.ToPascalCase(key));
                     JToken value = data.GetValue(StringFormatter.NormalizeProperty(key));
 
-                    if (propertyInfo.PropertyType == typeof(int))
+                    if (value.Type == JTokenType.Null || value.HasValues)
+                    {
+                        propertyInfo.SetValue(obj, null);
+                    }
+                    else if(propertyInfo.PropertyType == typeof(int))
                     {
                         propertyInfo.SetValue(obj, (int)value);
+                    }
+                    else if (propertyInfo.PropertyType == typeof(long))
+                    {
+                        propertyInfo.SetValue(obj, (long)value);
                     }
                     else if (propertyInfo.PropertyType == typeof(double))
                     {

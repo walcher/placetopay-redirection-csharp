@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace PlacetoPay.Redirection.Message
 {
@@ -50,6 +48,17 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// RedirectRequest constructor.
         /// </summary>
+        public RedirectRequest() { }
+
+        /// <summary>
+        /// RedirectRequest constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public RedirectRequest(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// RedirectRequest constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public RedirectRequest(JObject data)
         {
@@ -88,49 +97,6 @@ namespace PlacetoPay.Redirection.Message
             if (data.ContainsKey(FIELDS))
             {
                 this.SetFields<RedirectRequest>(data.GetValue(FIELDS).ToObject<JArray>());
-            }
-        }
-
-        /// <summary>
-        /// RedirectRequest constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public RedirectRequest(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            if (!json.ContainsKey(EXPIRATION))
-            {
-                expiration = (DateTime.Now).AddDays(+1).ToString(DATE_FORMAT);
-            }
-
-            this.Load<RedirectRequest>(json, new JArray { RETURN_URL, PAYMENT_METHOD, CANCEL_URL, IP_ADDRESS, USER_AGENT, EXPIRATION, CAPTURE_ADDRESS, SKIP_RESULT, NO_BUYER_FILL });
-
-            if (json.ContainsKey(LOCALE))
-            {
-                locale = (string)json.GetValue(LOCALE);
-            }
-
-            if (json.ContainsKey(PAYER))
-            {
-                SetPayer(json.GetValue(PAYER).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(BUYER))
-            {
-                SetBuyer(json.GetValue(BUYER).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(PAYMENT))
-            {
-                SetPayment(json.GetValue(PAYMENT).ToObject<JObject>());
-            }
-
-            subscription = json.ContainsKey(SUBSCRIPTION) ? new Subscription(json.GetValue(SUBSCRIPTION).ToObject<JObject>()) : null;
-
-            if (json.ContainsKey(FIELDS))
-            {
-                this.SetFields<RedirectRequest>(json.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 
@@ -345,11 +311,11 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Set locale data.
         /// </summary>
-        /// <param name="locale">string</param>
+        /// <param name="data">string</param>
         /// <returns>RedirectRequest</returns>
-        public RedirectRequest SetLocale(string locale)
+        public RedirectRequest SetLocale(string data)
         {
-            this.locale = locale;
+            locale = data;
 
             return this;
         }
@@ -357,19 +323,24 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Set subscription data.
         /// </summary>
-        /// <param name="subscription">string</param>
+        /// <param name="data">object</param>
         /// <returns>RedirectRequest</returns>
-        public RedirectRequest SetSubscription(JObject subscription)
+        public RedirectRequest SetSubscription(object data)
         {
-            if (subscription is JObject)
+            if (data != null)
             {
-                this.subscription = new Subscription(subscription);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Subscription((JObject)data);
+                }
 
-            if (!(this.subscription.GetType() == typeof(Subscription)))
-            {
-                this.subscription = null;
-            }
+                if (!(data.GetType() == typeof(Subscription)))
+                {
+                    data = null;
+                }
+            }            
+
+            subscription = (Subscription)data;
 
             return this;
         }

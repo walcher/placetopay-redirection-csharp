@@ -43,6 +43,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Payment constructor.
         /// </summary>
+        public Payment() { }
+
+        /// <summary>
+        /// Payment constructor.
+        /// </summary>
+        /// <param name="data"></param>
+        public Payment(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Payment constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Payment(JObject data)
         {
@@ -63,49 +74,20 @@ namespace PlacetoPay.Redirection.Entities
                 SetShipping(data.GetValue(SHIPPING).ToObject<JObject>());
             }
 
-            items = data.ContainsKey(ITEMS) ? SetItem(data.GetValue(ITEMS).ToObject<JArray>()) : null;
+            if (data.ContainsKey(ITEMS))
+            {
+                SetItem(data.GetValue(ITEMS).ToObject<JArray>());
+            }
 
             if (data.ContainsKey(FIELDS))
             {
                 this.SetFields<Payment>(data.GetValue(FIELDS).ToObject<JArray>());
             }
 
-            gds = data.ContainsKey(GDS) ? new GDS(data.GetValue(GDS).ToObject<JObject>()) : null;
-        }
-
-        /// <summary>
-        /// Payment constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public Payment(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Payment>(json, new JArray { REFERENCE, DESCRIPTION, ALLOW_PARTIAL, SUBSCRIBE, AGREEMENT, AGREEMENT_TYPE });
-
-            if (json.ContainsKey(AMOUNT))
+            if (data.ContainsKey(GDS))
             {
-                SetAmount(json.GetValue(AMOUNT).ToObject<JObject>());
+                SetGDS(data.GetValue(GDS).ToObject<JObject>());
             }
-
-            if (json.ContainsKey(RECURRING))
-            {
-                SetRecurring(json.GetValue(RECURRING).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(SHIPPING))
-            {
-                SetShipping(json.GetValue(SHIPPING).ToObject<JObject>());
-            }
-
-            items = json.ContainsKey(ITEMS) ? SetItem(json.GetValue(ITEMS).ToObject<JArray>()) : null;
-
-            if (json.ContainsKey(FIELDS))
-            {
-                this.SetFields<Payment>(json.GetValue(FIELDS).ToObject<JArray>());
-            }
-
-            gds = json.ContainsKey(GDS) ? new GDS(json.GetValue(GDS).ToObject<JObject>()) : null;
         }
 
         /// <summary>
@@ -261,22 +243,83 @@ namespace PlacetoPay.Redirection.Entities
         }
 
         /// <summary>
-        /// Set list of items.
+        /// Set reference property data.
         /// </summary>
-        /// <param name="items">JArray</param>
-        /// <returns>List of items</returns>
-        private List<Item> SetItem(JArray items)
+        /// <param name="data">string</param>
+        /// <returns>Payment</returns>
+        public Payment SetReference(string data)
         {
-            List<Item> list = new List<Item>();
+            reference = data;
 
-            foreach (var item in items)
+            return this;
+        }
+
+        /// <summary>
+        /// Set description property data.
+        /// </summary>
+        /// <param name="data">string</param>
+        /// <returns>Payment</returns>
+        public Payment SetDescription(string data)
+        {
+            description = data;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set gds property data.
+        /// </summary>
+        /// <param name="data">object</param>
+        /// <returns>Payment</returns>
+        public Payment SetGDS(object data)
+        {
+            if (data != null && data.GetType() == typeof(JObject))
             {
-                JObject itemDetail = item.ToObject<JObject>();
-
-                list.Add(new Item(itemDetail));
+                data = new GDS((JObject)data);
             }
 
-            return list;
+            gds = (GDS)data;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set list of items.
+        /// </summary>
+        /// <param name="data">object</param>
+        /// <returns>Payment</returns>
+        private Payment SetItem(object data)
+        {
+            if (data != null)
+            {
+                if (data.GetType() == typeof(JObject))
+                {
+                    JObject item = (JObject)data;
+
+                    if (item.ContainsKey(ITEMS))
+                    {
+                        data = item.GetValue(ITEMS).ToObject<JArray>();
+                    }
+                }
+
+                if (data.GetType() == typeof(JArray))
+                {
+                    List<Item> list = new List<Item>();
+
+                    foreach (var item in (JArray)data)
+                    {
+                        JObject itemDetail = item.ToObject<JObject>();
+
+                        list.Add(new Item(itemDetail));
+                    }
+
+                    data = list;
+                }
+
+                items = (List<Item>)data;
+            }
+
+            return this;
         }
 
         /// <summary>

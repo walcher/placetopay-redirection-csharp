@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Validators;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -30,6 +31,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Person constructor.
         /// </summary>
+        public Person() { }
+
+        /// <summary>
+        /// Person constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Person(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Person constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Person(JObject data)
         {
@@ -38,22 +50,6 @@ namespace PlacetoPay.Redirection.Entities
             if (data.ContainsKey(ADDRESS))
             {
                 SetAddress(data.GetValue(ADDRESS).ToObject<JObject>());
-            }
-        }
-
-        /// <summary>
-        /// Person constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public Person(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Person>(json, new JArray { DOCUMENT, DOCUMENT_TYPE, NAME, SURNAME, COMPANY, EMAIL, MOBILE });
-
-            if (json.ContainsKey(ADDRESS))
-            {
-                SetAddress(json.GetValue(ADDRESS).ToObject<JObject>());
             }
         }
 
@@ -157,7 +153,7 @@ namespace PlacetoPay.Redirection.Entities
         /// </summary>
         public string Mobile
         {
-            get { return mobile; }
+            get { return PersonValidator.NormalizePhone(mobile); }
             set { mobile = value; }
         }
 

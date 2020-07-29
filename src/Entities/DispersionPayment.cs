@@ -15,21 +15,24 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// DispersionPayment constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public DispersionPayment(JObject data) : base(data)
-        {
-            dispersion = data.ContainsKey(DISPERSION) ? SetDispersion(data.GetValue(DISPERSION).ToObject<JArray>()) : null;
-        }
+        public DispersionPayment() { }
 
         /// <summary>
         /// DispersionPayment constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public DispersionPayment(string data) : base(data)
-        {
-            JObject json = JObject.Parse(data);
+        public DispersionPayment(string data) : this(JObject.Parse(data)) { }
 
-            dispersion = json.ContainsKey(DISPERSION) ? SetDispersion(json.GetValue(DISPERSION).ToObject<JArray>()) : null;
+        /// <summary>
+        /// DispersionPayment constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public DispersionPayment(JObject data) : base(data)
+        {
+            if (data.ContainsKey(DISPERSION))
+            {
+                SetDispersion(data.GetValue(DISPERSION).ToObject<JArray>());
+            }
         }
 
         /// <summary>
@@ -92,23 +95,35 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set list of payments.
         /// </summary>
-        /// <param name="payments">JArray</param>
-        /// <returns>List</returns>
-        public List<Payment> SetDispersion(JArray payments)
+        /// <param name="data">object</param>
+        /// <returns>DispersionPayment</returns>
+        public DispersionPayment SetDispersion(object data)
         {
-            List<Payment> list = new List<Payment>();
-
-            foreach (var payment in payments)
+            if (data != null && data.GetType() == typeof(JArray))
             {
-                JObject entity = payment.ToObject<JObject>();
+                List<Payment> list = new List<Payment>();
 
-                entity.Add(new JProperty(REFERENCE, reference));
-                entity.Add(new JProperty(DESCRIPTION, description));
+                foreach (var payment in (JArray)data)
+                {
+                    //TODO: Refactor this!
+                    //JObject entity = payment.ToObject<JObject>();
 
-                list.Add(new Payment(entity));
+                    //entity.Add(new JProperty(REFERENCE, reference));
+                    //entity.Add(new JProperty(DESCRIPTION, description));
+
+                    Payment entity = new Payment((JObject)payment);
+
+                    entity.SetReference(Reference).SetDescription(Description);
+
+                    list.Add(entity);
+                }
+
+                data = list;
             }
 
-            return list;
+            dispersion = (List<Payment>)data;
+
+            return this;
         }
 
         /// <summary>

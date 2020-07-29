@@ -28,21 +28,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Address constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Address(JObject data)
-        {
-            this.Load<Address>(data, new JArray { STREET, CITY, STATE, POSTAL_CODE, PHONE, COUNTRY });
-        }
+        public Address() { }
 
         /// <summary>
         /// Address constructor.
         /// </summary>
-        /// <param name="data"></param>
-        public Address(string data)
-        {
-            JObject json = JObject.Parse(data);
+        /// <param name="data">string</param>
+        public Address(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<Address>(json, new JArray { STREET, CITY, STATE, POSTAL_CODE, PHONE, COUNTRY });
+        /// <summary>
+        /// Address constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Address(JObject data)
+        {
+            this.Load<Address>(data, new JArray { STREET, CITY, STATE, POSTAL_CODE, PHONE, COUNTRY });
         }
 
         /// <summary>

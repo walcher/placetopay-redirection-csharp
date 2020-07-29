@@ -21,11 +21,14 @@ namespace PlacetoPay.Redirection.Extensions
         {
             List<NameValuePair> list = new List<NameValuePair>();
 
-            foreach (var field in fields)
+            if (fields != null)
             {
-                JObject fieldDetail = field.ToObject<JObject>();
+                foreach (var field in fields)
+                {
+                    JObject fieldDetail = field.ToObject<JObject>();
 
-                list.Add(new NameValuePair(fieldDetail));
+                    list.Add(new NameValuePair(fieldDetail));
+                }
             }
 
             PropertyInfo propertyInfo = obj.GetType().GetProperty(FIELDS_PROPERTY);

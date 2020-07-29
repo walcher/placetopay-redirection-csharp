@@ -31,7 +31,10 @@ namespace PlacetoPay.Redirection.Message
         /// <param name="data">JObject</param>
         public CollectRequest(JObject data)
         {
-            this.Load<CollectRequest>(data, new JArray { LOCALE });
+            if (data.ContainsKey(LOCALE))
+            {
+                locale = (string)data.GetValue(LOCALE);
+            }
 
             if (data.ContainsKey(PAYER))
             {

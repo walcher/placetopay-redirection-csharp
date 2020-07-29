@@ -19,21 +19,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// AmountBase construnctor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public AmountBase(JObject data)
-        {
-            this.Load<AmountBase>(data, new JArray { CURRENCY, TOTAL });
-        }
+        public AmountBase() { }
 
         /// <summary>
         /// AmountBase construnctor.
         /// </summary>
         /// <param name="data">string</param>
-        public AmountBase(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public AmountBase(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<AmountBase>(json, new JArray { CURRENCY, TOTAL });
+        /// <summary>
+        /// AmountBase construnctor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public AmountBase(JObject data)
+        {
+            this.Load<AmountBase>(data, new JArray { CURRENCY, TOTAL });
         }
 
         /// <summary>
