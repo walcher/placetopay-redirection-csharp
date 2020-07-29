@@ -31,289 +31,338 @@ namespace PlacetoPay.Redirection.Contracts
         public abstract JObject ToJsonObject();
 
         /// <summary>
-        /// Set de payer data.
+        /// Set payer property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetPayer(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetPayer(object data)
         {
-            Person payer = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                payer = new Person(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Person((JObject)data);
+                }
 
-            if (!(payer.GetType() == typeof(Person)))
-            {
-                payer = null;
+                if (!(data.GetType() == typeof(Person)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(PAYER_PROPERTY);
-            propertyInfo.SetValue(this, payer);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set buyer data.
+        /// Set buyer property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetBuyer(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetBuyer(object data)
         {
-            Person buyer = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                buyer = new Person(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Person((JObject)data);
+                }
 
-            if (!(buyer.GetType() == typeof(Person)))
-            {
-                buyer = null;
+                if (!(data.GetType() == typeof(Person)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(BUYER_PROPERTY);
-            propertyInfo.SetValue(this, buyer);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set payment data.
+        /// Set payment property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetPayment(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetPayment(object data)
         {
-            Payment payment = null;
-
-            if (data is JObject)
+            if (data.GetType() == typeof(JObject))
             {
-                payment = new DispersionPayment(data);
+                data = new DispersionPayment((JObject)data);
             }
 
-            if (!(payment.GetType() == typeof(DispersionPayment)))
+            if (!(data.GetType() == typeof(DispersionPayment)))
             {
-                payment = null;
+                data = null;
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(PAYMENT_PROPERTY);
-            propertyInfo.SetValue(this, payment);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set status data.
+        /// Set status property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetStatus(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetStatus(object data)
         {
-            Status status = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                status = new Status(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Status((JObject)data);
+                }
 
-            if (!(status.GetType() == typeof(Status)))
-            {
-                status = null;
+                if (!(data.GetType() == typeof(Status)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(STATUS_PROPERTY);
-            propertyInfo.SetValue(this, status);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set amount data.
+        /// Set amount property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetAmount(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetAmount(object data)
         {
-            Amount amount = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                amount = new Amount(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Amount((JObject)data);
+                }
 
-            if (!(amount.GetType() == typeof(Amount)))
-            {
-                amount = null;
+                if (!(data.GetType() == typeof(Amount)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(AMOUNT_PROPERTY);
-            propertyInfo.SetValue(this, amount);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set recurring data.
+        /// Set recurring property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetRecurring(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetRecurring(object data)
         {
-            Recurring recurring = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                recurring = new Recurring(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Recurring((JObject)data);
+                }
 
-            if (!(recurring.GetType() == typeof(Recurring)))
-            {
-                recurring = null;
+                if (!(data.GetType() == typeof(Recurring)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(RECURRING_PROPERTY);
-            propertyInfo.SetValue(this, recurring);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set shipping data.
+        /// Set shipping property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetShipping(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetShipping(object data)
         {
-            Person shipping = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                shipping = new Person(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Person((JObject)data);
+                }
 
-            if (!(shipping.GetType() == typeof(Person)))
-            {
-                shipping = null;
+                if (!(data.GetType() == typeof(Person)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(SHIPPING_PROPERTY);
-            propertyInfo.SetValue(this, shipping);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set instrument data.
+        /// Set instrument property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetInstrument(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetInstrument(object data)
         {
-            Instrument instrument = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                instrument = new Instrument(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Instrument((JObject)data);
+                }
 
-            if (!(instrument.GetType() == typeof(Instrument)))
-            {
-                instrument = null;
+                if (!(data.GetType() == typeof(Instrument)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(INSTRUMENT_PROPERTY);
-            propertyInfo.SetValue(this, instrument);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set bank data.
+        /// Set bank property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetBank(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetBank(object data)
         {
-            Bank bank = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                bank = new Bank(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Bank((JObject)data);
+                }
 
-            if (!(bank.GetType() == typeof(Bank)))
-            {
-                bank = null;
+                if (!(data.GetType() == typeof(Bank)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(BANK_PROPERTY);
-            propertyInfo.SetValue(this, bank);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set credit data.
+        /// Set credit property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetCredit(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetCredit(object data)
         {
-            Credit credit = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                credit = new Credit(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Credit((JObject)data);
+                }
 
-            if (!(credit.GetType() == typeof(Credit)))
-            {
-                credit = null;
+                if (!(data.GetType() == typeof(Credit)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(CREDIT_PROPERTY);
-            propertyInfo.SetValue(this, credit);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set token data.
+        /// Set token property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetToken(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetToken(object data)
         {
-            Token token = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                token = new Token(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Token((JObject)data);
+                }
 
-            if (!(token.GetType() == typeof(Token)))
-            {
-                token = null;
+                if (!(data.GetType() == typeof(Token)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(TOKEN_PROPERTY);
-            propertyInfo.SetValue(this, token);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set card data.
+        /// Set card property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetCard(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetCard(object data)
         {
-            Card card = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                card = new Card(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Card((JObject)data);
+                }
 
-            if (!(card.GetType() == typeof(Card)))
-            {
-                card = null;
+                if (!(data.GetType() == typeof(Card)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(CARD_PROPERTY);
-            propertyInfo.SetValue(this, card);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>
-        /// Set address data.
+        /// Set address property data.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public void SetAddress(JObject data)
+        /// <param name="data">object</param>
+        /// <returns>object</returns>
+        public object SetAddress(object data)
         {
-            Address address = null;
-
-            if (data is JObject)
+            if (data != null)
             {
-                address = new Address(data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new Address((JObject)data);
+                }
 
-            if (!(address.GetType() == typeof(Address)))
-            {
-                address = null;
+                if (!(data.GetType() == typeof(Address)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(ADDRESS_PROPERTY);
-            propertyInfo.SetValue(this, address);
+            propertyInfo.SetValue(this, data);
+
+            return this;
         }
 
         /// <summary>

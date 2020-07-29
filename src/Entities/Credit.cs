@@ -22,21 +22,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Credit constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Credit(JObject data)
-        {
-            this.Load<Credit>(data, new JArray { CODE, TYPE, GROUP_CODE, INSTALLMENT });
-        }
+        public Credit() { }
 
         /// <summary>
         /// Credit constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Credit(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public Credit(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<Credit>(json, new JArray { CODE, TYPE, GROUP_CODE, INSTALLMENT });
+        /// <summary>
+        /// Credit constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Credit(JObject data)
+        {
+            this.Load<Credit>(data, new JArray { CODE, TYPE, GROUP_CODE, INSTALLMENT });
         }
 
         /// <summary>

@@ -45,21 +45,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Status constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Status(JObject data)
-        {
-            this.Load<Status>(data, new JArray { STATUS, REASON, MESSAGE, DATE });
-        }
+        public Status() { }
 
         /// <summary>
         /// Status constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Status(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public Status(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<Status>(json, new JArray { STATUS, REASON, MESSAGE, DATE });
+        /// <summary>
+        /// Status constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Status(JObject data)
+        {
+            this.Load<Status>(data, new JArray { STATUS, REASON, MESSAGE, DATE });
         }
 
         /// <summary>

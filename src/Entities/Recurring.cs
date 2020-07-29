@@ -28,6 +28,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Recurring constructor.
         /// </summary>
+        public Recurring() { }
+
+        /// <summary>
+        /// Recurring constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Recurring(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Recurring constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Recurring(JObject data)
         {
@@ -41,27 +52,6 @@ namespace PlacetoPay.Redirection.Entities
             if (data.ContainsKey(DUE_DATE))
             {
                 dueDate = DateTime.Parse((string)data.GetValue(DUE_DATE)).ToString(DATE_FORMAT);
-            }
-        }
-
-        /// <summary>
-        /// Recurring constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public Recurring(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Recurring>(json, new JArray { PERIODICITY, INTERVAL, MAX_PERIODS, NOTIFICATION_URL });
-
-            if (json.ContainsKey(NEXT_PAYMENT))
-            {
-                nextPayment = DateTime.Parse((string)json.GetValue(NEXT_PAYMENT)).ToString(DATE_FORMAT);
-            }
-
-            if (json.ContainsKey(DUE_DATE))
-            {
-                dueDate = DateTime.Parse((string)json.GetValue(DUE_DATE)).ToString(DATE_FORMAT);
             }
         }
 

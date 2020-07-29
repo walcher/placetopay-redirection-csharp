@@ -20,21 +20,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// NameValuePair constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public NameValuePair(JObject data)
-        {
-            this.Load<NameValuePair>(data, new JArray { KEYWORD, VALUE, DISPLAY_ON });
-        }
+        public NameValuePair() { }
 
         /// <summary>
         /// NameValuePair constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public NameValuePair(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public NameValuePair(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<NameValuePair>(json, new JArray { KEYWORD, VALUE, DISPLAY_ON });
+        /// <summary>
+        /// NameValuePair constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public NameValuePair(JObject data)
+        {
+            this.Load<NameValuePair>(data, new JArray { KEYWORD, VALUE, DISPLAY_ON });
         }
 
         /// <summary>

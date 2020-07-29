@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PlacetoPay.Redirection.Validators
+﻿namespace PlacetoPay.Redirection.Validators
 {
     /// <summary>
     /// Class <c>PersonValidator</c>
@@ -16,7 +12,12 @@ namespace PlacetoPay.Redirection.Validators
         /// <returns>string</returns>
         public static string NormalizePhone(string phone)
         {
-            return phone.Replace("+57", "");
+            if (phone != null)
+            {
+                phone = phone.Replace("+57", "");
+            }
+
+            return phone;
         }
     }
 }
