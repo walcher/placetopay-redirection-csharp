@@ -89,14 +89,17 @@ namespace PlacetoPay.Redirection.Contracts
         /// <returns>object</returns>
         public object SetPayment(object data)
         {
-            if (data.GetType() == typeof(JObject))
+            if (data != null)
             {
-                data = new DispersionPayment((JObject)data);
-            }
+                if (data.GetType() == typeof(JObject))
+                {
+                    data = new DispersionPayment((JObject)data);
+                }
 
-            if (!(data.GetType() == typeof(DispersionPayment)))
-            {
-                data = null;
+                if (!(data.GetType() == typeof(DispersionPayment)))
+                {
+                    data = null;
+                }
             }
 
             PropertyInfo propertyInfo = GetType().GetProperty(PAYMENT_PROPERTY);
