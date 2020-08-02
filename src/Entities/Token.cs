@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -11,7 +12,7 @@ namespace PlacetoPay.Redirection.Entities
     public class Token : Entity
     {
         protected const string STATUS = "status";
-        protected const string TOKEN = "token";
+        protected const string TOKEN = "tokenText";
         protected const string SUBTOKEN = "subtoken";
         protected const string FRANCHISE = "franchise";
         protected const string FRANCHISE_NAME = "franchiseName";
@@ -36,6 +37,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Token constructor.
         /// </summary>
+        public Token() { }
+
+        /// <summary>
+        /// Token constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Token(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Token constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Token(JObject data)
         {
@@ -43,23 +55,7 @@ namespace PlacetoPay.Redirection.Entities
 
             if (data.ContainsKey(STATUS))
             {
-                SetToken(data.GetValue(STATUS).ToObject<JObject>());
-            }
-        }
-
-        /// <summary>
-        /// Token constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public Token(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Token>(json, new JArray { TOKEN, SUBTOKEN, FRANCHISE, FRANCHISE_NAME, ISSUER_NAME, LAST_DIGITS, VALID_UNTIL, CVV, INSTALLMENTS });
-
-            if (json.ContainsKey(STATUS))
-            {
-                SetToken(json.GetValue(STATUS).ToObject<JObject>());
+                SetStatus(data.GetValue(STATUS).ToObject<JObject>());
             }
         }
 
@@ -217,7 +213,7 @@ namespace PlacetoPay.Redirection.Entities
         {
             return JObjectFilter(new JObject {
                 { STATUS, Status?.ToJsonObject() },
-                { TOKEN, TokenText },
+                { StringFormatter.NormalizeProperty(TOKEN), TokenText },
                 { SUBTOKEN, Subtoken },
                 { FRANCHISE, Franchise },
                 { FRANCHISE_NAME, FranchiseName },

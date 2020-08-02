@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
-using System.IO;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -17,10 +14,21 @@ namespace PlacetoPay.Redirection.Entities
         protected const string GROUP_CODE = "groupCode";
         protected const string INSTALLMENT = "installment";
 
-        protected double code;
+        protected int code;
         protected string type;
         protected string groupCode;
         protected int installment;
+
+        /// <summary>
+        /// Credit constructor.
+        /// </summary>
+        public Credit() { }
+
+        /// <summary>
+        /// Credit constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Credit(string data) : this(JObject.Parse(data)) { }
 
         /// <summary>
         /// Credit constructor.
@@ -34,27 +42,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Credit constructor.
         /// </summary>
-        /// <param name="data">string</param>
-        public Credit(string data)
-        {
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
-
-            this.Load<Credit>(json, new JArray { CODE, TYPE, GROUP_CODE, INSTALLMENT });
-        }
-
-        /// <summary>
-        /// Credit constructor.
-        /// </summary>
         /// <param name="code">double</param>
         /// <param name="type">string</param>
         /// <param name="groupCode">string</param>
         /// <param name="installment">int</param>
-        public Credit(double code, string type, string groupCode, int installment)
+        public Credit(int code, string type, string groupCode, int installment)
         {
             this.code = code;
             this.type = type;
@@ -65,7 +57,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Code property.
         /// </summary>
-        public double Code
+        public int Code
         {
             get { return code; }
             set { code = value; }
@@ -104,7 +96,12 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { CODE, Code },
+                { TYPE, Type },
+                { GROUP_CODE, GroupCode },
+                { INSTALLMENT, Installment },
+            });
         }
     }
 }

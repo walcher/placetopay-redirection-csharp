@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -20,23 +19,29 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Amount constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Amount(JObject data) : base(data)
-        {
-            taxes = data.ContainsKey(TAXES) ? SetTaxes(data.GetValue(TAXES).ToObject<JArray>()) : null;
-            details = data.ContainsKey(DETAILS) ? SetDetails(data.GetValue(DETAILS).ToObject<JArray>()) : null;
-        }
+        public Amount() { }
 
         /// <summary>
         /// Amount constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Amount(string data) : base(data)
-        {
-            JObject json = JObject.Parse(data);
+        public Amount(string data) : this(JObject.Parse(data)) { }
 
-            taxes = json.ContainsKey(TAXES) ? SetTaxes(json.GetValue(TAXES).ToObject<JArray>()) : null;
-            details = json.ContainsKey(DETAILS) ? SetDetails(json.GetValue(DETAILS).ToObject<JArray>()) : null;
+        /// <summary>
+        /// Amount constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Amount(JObject data) : base(data)
+        {
+            if (data.ContainsKey(TAXES))
+            {
+                SetTaxes(data.GetValue(TAXES).ToObject<JArray>());
+            }
+
+            if (data.ContainsKey(DETAILS))
+            {
+                SetDetails(data.GetValue(DETAILS).ToObject<JArray>());
+            }
         }
 
         /// <summary>
@@ -87,40 +92,54 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set list of taxes.
         /// </summary>
-        /// <param name="taxes">JArray</param>
-        /// <returns></returns>
-        private List<TaxDetail> SetTaxes(JArray taxes)
+        /// <param name="data">object</param>
+        /// <returns>Amount</returns>
+        private Amount SetTaxes(object data)
         {
-            List<TaxDetail> list = new List<TaxDetail>();
-
-            foreach (var tax in taxes)
+            if (data != null && data.GetType() == typeof(JArray))
             {
-                JObject taxDetail = tax.ToObject<JObject>();
+                List<TaxDetail> list = new List<TaxDetail>();
 
-                list.Add(new TaxDetail(taxDetail));
-                taxAmount += (double)taxDetail.GetValue(AMOUNT);
+                foreach (var tax in (JArray)data)
+                {
+                    JObject taxDetail = tax.ToObject<JObject>();
+
+                    list.Add(new TaxDetail(taxDetail));
+                    taxAmount += (double)taxDetail.GetValue(AMOUNT);
+                }
+
+                data = list;
             }
 
-            return list;
+            taxes = (List<TaxDetail>)data;
+
+            return this;
         }
 
         /// <summary>
         /// Set list of amount details.
         /// </summary>
-        /// <param name="details">JArray</param>
-        /// <returns></returns>
-        private List<AmountDetail> SetDetails(JArray details)
+        /// <param name="data">object</param>
+        /// <returns>Amount</returns>
+        private Amount SetDetails(object data)
         {
-            List<AmountDetail> list = new List<AmountDetail>();
-
-            foreach (var detail in details)
+            if (data != null)
             {
-                JObject amountDetail = detail.ToObject<JObject>();
+                List<AmountDetail> list = new List<AmountDetail>();
 
-                list.Add(new AmountDetail(amountDetail));
+                foreach (var detail in (JArray)data)
+                {
+                    JObject amountDetail = detail.ToObject<JObject>();
+
+                    list.Add(new AmountDetail(amountDetail));
+                }
+
+                data = list;
             }
 
-            return list;
+            details = (List<AmountDetail>)data;
+
+            return this;
         }
 
         /// <summary>

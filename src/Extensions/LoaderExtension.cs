@@ -21,7 +21,7 @@ namespace PlacetoPay.Redirection.Extensions
         {
             foreach (string key in keys)
             {
-                if (jsonData.ContainsKey(key))
+                if (jsonData.ContainsKey(StringFormatter.NormalizeProperty(key)))
                 {
                     JsonReader reader = new JsonTextReader(new StringReader(jsonData.ToString()))
                     {
@@ -29,12 +29,21 @@ namespace PlacetoPay.Redirection.Extensions
                     };
 
                     JObject data = JObject.Load(reader);
-                    PropertyInfo propertyInfo = obj.GetType().GetProperty(StringFormatter.ToPascalCase(key));
-                    JToken value = data.GetValue(key);
 
-                    if (propertyInfo.PropertyType == typeof(int))
+                    PropertyInfo propertyInfo = obj.GetType().GetProperty(StringFormatter.ToPascalCase(key));
+                    JToken value = data.GetValue(StringFormatter.NormalizeProperty(key));
+
+                    if (value.Type == JTokenType.Null || value.HasValues)
+                    {
+                        propertyInfo.SetValue(obj, null);
+                    }
+                    else if(propertyInfo.PropertyType == typeof(int))
                     {
                         propertyInfo.SetValue(obj, (int)value);
+                    }
+                    else if (propertyInfo.PropertyType == typeof(long))
+                    {
+                        propertyInfo.SetValue(obj, (long)value);
                     }
                     else if (propertyInfo.PropertyType == typeof(double))
                     {

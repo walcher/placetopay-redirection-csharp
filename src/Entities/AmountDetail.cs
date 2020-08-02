@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
+using PlacetoPay.Redirection.Helpers;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -19,21 +19,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// AmountDetail constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public AmountDetail(JObject data)
-        {
-            this.Load<AmountDetail>(data, new JArray { KIND, AMOUNT });
-        }
+        public AmountDetail() { }
 
         /// <summary>
         /// AmountDetail constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public AmountDetail(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public AmountDetail(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<AmountDetail>(json, new JArray { KIND, AMOUNT });
+        /// <summary>
+        /// AmountDetail constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public AmountDetail(JObject data)
+        {
+            this.Load<AmountDetail>(data, new JArray { KIND, AMOUNT });
         }
 
         /// <summary>
@@ -71,10 +71,12 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            return JObjectFilter(new JObject {
-                { KIND, Kind },
-                { AMOUNT, Amount },
-            });
+            return JObjectFilter(
+                NumberFormatter.NormalizeNumber(new JObject {
+                    { KIND, Kind },
+                    { AMOUNT, Amount },
+                })
+            );
         }
     }
 }

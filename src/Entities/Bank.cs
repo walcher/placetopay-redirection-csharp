@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -23,21 +22,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Bank constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Bank(JObject data)
-        {
-            this.Load<Bank>(data, new JArray { INTERFACE, CODE, NAME });
-        }
+        public Bank() { }
 
         /// <summary>
         /// Bank constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Bank(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public Bank(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<Bank>(json, new JArray { INTERFACE, CODE, NAME });
+        /// <summary>
+        /// Bank constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Bank(JObject data)
+        {
+            this.Load<Bank>(data, new JArray { INTERFACE, CODE, NAME });
         }
 
         /// <summary>
@@ -90,7 +89,11 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { INTERFACE, Interface },
+                { CODE, Code },
+                { NAME, Name },
+            });
         }
     }
 }

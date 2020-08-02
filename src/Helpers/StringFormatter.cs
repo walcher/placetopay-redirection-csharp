@@ -32,5 +32,20 @@ namespace PlacetoPay.Redirection.Helpers
 
             return string.Concat(pascalCase);
         }
+
+        /// <summary>
+        /// Remove text from string.
+        /// </summary>
+        /// <param name="data">string</param>
+        /// <returns>string</returns>
+        public static string NormalizeProperty(string data)
+        {
+            if (data.Contains("Text"))
+            {
+                data = data.Remove(data.IndexOf("T"));
+            }
+
+            return data;
+        }
     }
 }

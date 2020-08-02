@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
-using System.IO;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -25,6 +22,17 @@ namespace PlacetoPay.Redirection.Entities
         protected Credit credit;
         protected string pin;
         protected string password;
+
+        /// <summary>
+        /// Instrument constructor.
+        /// </summary>
+        public Instrument() { }
+
+        /// <summary>
+        /// Instrument constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Instrument(string data) : this(JObject.Parse(data)) { }
 
         /// <summary>
         /// Instrument constructor.
@@ -52,42 +60,6 @@ namespace PlacetoPay.Redirection.Entities
             if (data.ContainsKey(TOKEN))
             {
                 SetToken(data.GetValue(TOKEN).ToObject<JObject>());
-            }
-        }
-
-        /// <summary>
-        /// Instrument constructor.
-        /// </summary>
-        /// <param name="data"></param>
-        public Instrument(string data)
-        {
-            JsonReader reader = new JsonTextReader(new StringReader(data))
-            {
-                DateParseHandling = DateParseHandling.None
-            };
-
-            JObject json = JObject.Load(reader);
-
-            this.Load<Instrument>(json, new JArray { PIN, PASSWORD });
-
-            if (json.ContainsKey(BANK))
-            {
-                SetBank(json.GetValue(BANK).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(CARD))
-            {
-                SetCard(json.GetValue(CARD).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(CREDIT))
-            {
-                SetCredit(json.GetValue(CREDIT).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(TOKEN))
-            {
-                SetToken(json.GetValue(TOKEN).ToObject<JObject>());
             }
         }
 
@@ -177,7 +149,14 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            throw new NotImplementedException();
+            return JObjectFilter(new JObject {
+                { BANK, Bank?.ToJsonObject() },
+                { CARD, Card?.ToJsonObject() },
+                { CREDIT, Credit?.ToJsonObject() },
+                { TOKEN, Token?.ToJsonObject() },
+                { PIN, Pin },
+                { PASSWORD, Password },
+            });
         }
     }
 }

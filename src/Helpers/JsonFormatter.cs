@@ -12,7 +12,7 @@ namespace PlacetoPay.Redirection.Helpers
         /// </summary>
         /// <param name="token">JToken</param>
         /// <returns>JToken</returns>
-        public static JToken RemoveEmptyChildren(JToken token)
+        public static JToken RemoveNullOrEmpty(JToken token)
         {
             if (token.Type == JTokenType.Object)
             {
@@ -24,7 +24,7 @@ namespace PlacetoPay.Redirection.Helpers
 
                     if (child.HasValues)
                     {
-                        child = RemoveEmptyChildren(child);
+                        child = RemoveNullOrEmpty(child);
                     }
 
                     if (!IsEmpty(child))
@@ -45,7 +45,7 @@ namespace PlacetoPay.Redirection.Helpers
 
                     if (child.HasValues)
                     {
-                        child = RemoveEmptyChildren(child);
+                        child = RemoveNullOrEmpty(child);
                     }
 
                     if (!IsEmpty(child))
@@ -68,8 +68,9 @@ namespace PlacetoPay.Redirection.Helpers
         public static bool IsEmpty(JToken token)
         {
             return (token.Type == JTokenType.Null) ||
-                   (token.Type == JTokenType.Array && !token.HasValues) ||
-                   (token.Type == JTokenType.Object && !token.HasValues);
+                (token.Type == JTokenType.Integer && (int)token == 0) ||
+                (token.Type == JTokenType.Array && !token.HasValues) ||
+                (token.Type == JTokenType.Object && !token.HasValues);
         }
     }
 }

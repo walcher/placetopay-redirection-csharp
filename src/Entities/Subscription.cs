@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -22,6 +21,17 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Subscription constructor.
         /// </summary>
+        public Subscription() { }
+
+        /// <summary>
+        /// Subscription constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public Subscription(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// Subscription constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public Subscription(JObject data)
         {
@@ -30,22 +40,6 @@ namespace PlacetoPay.Redirection.Entities
             if (data.ContainsKey(FIELDS))
             {
                 this.SetFields<Subscription>(data.GetValue(FIELDS).ToObject<JArray>());
-            }
-        }
-
-        /// <summary>
-        /// Subscription constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public Subscription(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Subscription>(json, new JArray { REFERENCE, DESCRIPTION });
-
-            if (json.ContainsKey(FIELDS))
-            {
-                this.SetFields<Subscription>(json.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 
@@ -99,7 +93,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>JsonObject</returns>
         public override JObject ToJsonObject()
         {
-            return JObjectFilter(new JObject { 
+            return JObjectFilter(new JObject {
                 { REFERENCE, Reference },
                 { DESCRIPTION, Description },
                 { FIELDS, this.FieldsToJArray<Subscription>() },

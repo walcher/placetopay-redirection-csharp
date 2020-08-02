@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -23,21 +22,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// GDS constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public GDS(JObject data)
-        {
-            this.Load<GDS>(data, new JArray { CODE, SESSION, PNR, AIRLINE });
-        }
+        public GDS() { }
+
+        /// <summary>
+        /// GDS constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public GDS(string data) : this(JObject.Parse(data)) { }
 
         /// <summary>
         /// GDS constructor.
         /// </summary>
         /// <param name="data">JObject</param>
-        public GDS(string data)
+        public GDS(JObject data)
         {
-            JObject json = JObject.Parse(data);
-
-            this.Load<GDS>(json, new JArray { CODE, SESSION, PNR, AIRLINE });
+            this.Load<GDS>(data, new JArray { CODE, SESSION, PNR, AIRLINE });
         }
 
         /// <summary>

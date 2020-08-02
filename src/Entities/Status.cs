@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System;
 using System.Linq;
 
@@ -11,7 +12,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string DATE = "date";
         protected const string MESSAGE = "message";
         protected const string REASON = "reason";
-        protected const string STATUS = "status";
+        protected const string STATUS = "statusText";
         public const string ST_OK = "OK";
         public const string ST_FAILED = "FAILED";
         public const string ST_APPROVED = "APPROVED";
@@ -44,21 +45,21 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Status constructor.
         /// </summary>
-        /// <param name="data">JObject</param>
-        public Status(JObject data)
-        {
-            this.Load<Status>(data, new JArray { STATUS, REASON, MESSAGE, DATE });
-        }
+        public Status() { }
 
         /// <summary>
         /// Status constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Status(string data)
-        {
-            JObject json = JObject.Parse(data);
+        public Status(string data) : this(JObject.Parse(data)) { }
 
-            this.Load<Status>(json, new JArray { STATUS, REASON, MESSAGE, DATE });
+        /// <summary>
+        /// Status constructor.
+        /// </summary>
+        /// <param name="data">JObject</param>
+        public Status(JObject data)
+        {
+            this.Load<Status>(data, new JArray { STATUS, REASON, MESSAGE, DATE });
         }
 
         /// <summary>
@@ -201,7 +202,7 @@ namespace PlacetoPay.Redirection.Entities
         public override JObject ToJsonObject()
         {
             return JObjectFilter(new JObject {
-                { STATUS, StatusText },
+                { StringFormatter.NormalizeProperty(STATUS), StatusText },
                 { REASON, Reason },
                 { MESSAGE, Message },
                 { DATE, Date },

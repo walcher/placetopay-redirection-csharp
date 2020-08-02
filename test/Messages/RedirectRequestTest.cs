@@ -6,7 +6,7 @@ using PlacetoPay.Redirection.Message;
 namespace PlacetoPay.RedirectionTests.Messages
 {
     [TestFixture]
-    class RedirectRequestTest
+    public class RedirectRequestTest
     {
         [Test]
         public void Should_Parse_Correctly_A_Payment_Request()
@@ -200,7 +200,7 @@ namespace PlacetoPay.RedirectionTests.Messages
         [Test]
         public void Should_Parse_Correctly_A_Payment_Request_With_String_Data()
         {
-            string test =
+            string data =
             "{  " +
             "   \"payment\":{  " +
             "      \"reference\":\"Testing_S_2020\"," +
@@ -219,7 +219,7 @@ namespace PlacetoPay.RedirectionTests.Messages
             "   \"returnUrl\":\"http:\\/\\/your-return-url.com\"" +
             "}";
 
-            var request = new RedirectRequest(test);
+            var request = new RedirectRequest(data);
 
             Assert.AreEqual("http://your-return-url.com", request.ReturnUrl);
             Assert.AreEqual("Testing_S_2020", request.GetReference());
