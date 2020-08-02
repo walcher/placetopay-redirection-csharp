@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Helpers;
+using System;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -166,7 +167,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <returns>AmountConversion</returns>
         public AmountConversion SetFactor(object data)
         {
-            factor = (double)data;
+            factor = Convert.ToDouble(data);
 
             return this;
         }

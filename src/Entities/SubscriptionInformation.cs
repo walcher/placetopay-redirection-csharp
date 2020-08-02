@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -49,7 +47,7 @@ namespace PlacetoPay.Redirection.Entities
 
             if (data.ContainsKey(INSTRUMENT))
             {
-                SetInstrument(data.GetValue(INSTRUMENT).ToObject<JObject>());
+                SetInstrument(data.GetValue(INSTRUMENT).ToObject<JArray>());
             }
         }
 

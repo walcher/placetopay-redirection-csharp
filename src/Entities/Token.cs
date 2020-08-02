@@ -55,7 +55,7 @@ namespace PlacetoPay.Redirection.Entities
 
             if (data.ContainsKey(STATUS))
             {
-                SetToken(data.GetValue(STATUS).ToObject<JObject>());
+                SetStatus(data.GetValue(STATUS).ToObject<JObject>());
             }
         }
 
