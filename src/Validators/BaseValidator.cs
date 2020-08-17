@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PlacetoPay.Redirection.Exceptions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -76,7 +78,7 @@ namespace PlacetoPay.Redirection.Validators
         {
             Regex re = new Regex(pattern);
 
-            return re.IsMatch(value);
+            return !string.IsNullOrEmpty(value) && re.IsMatch(value);
         }
 
         /// <summary>
@@ -99,6 +101,91 @@ namespace PlacetoPay.Redirection.Validators
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Check if the string length is valid.
+        /// </summary>
+        /// <param name="value">string</param>
+        /// <param name="min">int</param>
+        /// <param name="max">int</param>
+        /// <param name="required">bool</param>
+        /// <returns>bool</returns>
+        public static bool IsValidLengthString(string value, int min, int max, bool required = false)
+        {
+            if (required && IsAnyNullOrEmpty(value))
+            {
+                return false;
+            }
+
+            if (value.Length < min || value.Length > max)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check if value is int.
+        /// </summary>
+        /// <param name="value">object</param>
+        /// <returns>bool</returns>
+        public static bool IsInteger(string value)
+        {
+            return int.TryParse(value, out _);
+        }
+
+        /// <summary>
+        /// Check if value is numeric.
+        /// </summary>
+        /// <param name="value">string</param>
+        /// <returns>bool</returns>
+        public static bool IsNumeric(string value)
+        {
+            return double.TryParse(value, out _);
+        }
+
+        /// <summary>
+        /// Check actual date.
+        /// </summary>
+        /// <param name="date">string</param>
+        /// <param name="minDifference">int</param>
+        /// <returns>bool</returns>
+        public static bool IsActualDate(string date, int minDifference = -1)
+        {
+            //TODO: Refactor this method!
+            var current = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0));
+            DateTime unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            long unix = (DateTime.Parse(date).ToUniversalTime() - unixStart).Ticks;
+
+            return (long)current.TotalSeconds - (double)unix / TimeSpan.TicksPerSecond > minDifference;
+        }
+
+        /// <summary>
+        /// Parse given date string.
+        /// </summary>
+        /// <param name="date">string</param>
+        /// <param name="format">string</param>
+        /// <returns>string</returns>
+        public static string ParseDate(string date, string format = "yyyy-MM-ddTHH\\:mm\\:sszzz")
+        {
+            return DateTime.Parse(date).ToString(format);
+        }
+
+        /// <summary>
+        /// Throw exception.
+        /// </summary>
+        /// <param name="fields">List</param>
+        /// <param name="from">string</param>
+        /// <param name="silent">bool</param>
+        /// <param name="message">string</param>
+        public static void ThrowValidationException(List<string> fields, string from, bool silent = true, string message = null)
+        {
+            if (!silent)
+            {
+                throw new EntityValidationFailException(fields, from, message);
+            }
         }
     }
 }

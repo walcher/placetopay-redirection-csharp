@@ -26,6 +26,18 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Notification constructor.
         /// </summary>
+        public Notification() { }
+
+        /// <summary>
+        /// Notification constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        /// <param name="tranKey">string</param>
+        public Notification(string data, string tranKey = "") : this(JObject.Parse(data), tranKey) { }
+
+        /// <summary>
+        /// Notification constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         /// <param name="tranKey">string</param>
         public Notification(JObject data, string tranKey = "")
@@ -35,25 +47,6 @@ namespace PlacetoPay.Redirection.Message
             if (data.ContainsKey(STATUS))
             {
                 SetStatus(data.GetValue(STATUS).ToObject<JObject>());
-            }
-
-            this.tranKey = tranKey;
-        }
-
-        /// <summary>
-        /// Notification constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        /// <param name="tranKey">string</param>
-        public Notification(string data, string tranKey = "")
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Notification>(json, new JArray { REQUEST_ID, REFERENCE, SIGNATURE });
-
-            if (json.ContainsKey(STATUS))
-            {
-                SetStatus(json.GetValue(STATUS).ToObject<JObject>());
             }
 
             this.tranKey = tranKey;

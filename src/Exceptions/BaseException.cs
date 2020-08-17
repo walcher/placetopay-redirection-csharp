@@ -7,5 +7,10 @@ namespace PlacetoPay.Redirection.Exceptions
     /// </summary>
     public class BaseException : Exception
     {
+        /// <summary>
+        /// BaseException constructor.
+        /// </summary>
+        /// <param name="message">string</param>
+        public BaseException(string message) : base(message) { }
     }
 }

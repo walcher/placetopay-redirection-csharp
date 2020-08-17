@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using PlacetoPay.Redirection.Entities;
+using PlacetoPay.Redirection.Exceptions;
+using System.Collections.Generic;
 
 namespace PlacetoPay.RedirectionTests.Validators
 {
@@ -41,6 +43,29 @@ namespace PlacetoPay.RedirectionTests.Validators
             var address = new Address();
 
             Assert.IsNull(address.Street);
+        }
+
+        [Test]
+        public void Should_Fail_When_No_Required_Provided()
+        {
+            string data = JsonConvert.SerializeObject(new
+            {
+                state = "Antioquia",
+                postalCode = "050012",
+                phone = "+5744442310 ext 1503",
+            });
+
+            JObject json = JObject.Parse(data);
+
+            try
+            {
+                var address = new Address(json).IsValid(out List<string> fields, false);
+            }
+            catch(EntityValidationFailException ex)
+            {
+                Assert.AreEqual(new List<string>() { "street", "city", "country" }, ex.Fields);
+                Assert.AreEqual("Address", ex.From);
+            }
         }
     }
 }
