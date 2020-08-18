@@ -18,7 +18,7 @@ namespace PlacetoPay.Redirection.Validators
         {
             Regex re = new Regex(VALIDATION_PATTERN);
 
-            return re.IsMatch(number);
+            return !string.IsNullOrEmpty(number) && re.IsMatch(number);
         }
     }
 }

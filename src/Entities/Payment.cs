@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Validators;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -25,6 +26,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string SHIPPING = "shipping";
         protected const string SUBSCRIBE = "subscribe";
 
+        protected PaymentValidator validator = new PaymentValidator();
         protected string reference;
         protected string description;
         protected Amount amount;

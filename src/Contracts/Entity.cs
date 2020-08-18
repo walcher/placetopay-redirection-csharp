@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Helpers;
-using PlacetoPay.Redirection.Validators;
 using System.Collections.Generic;
 using System.Reflection;
 

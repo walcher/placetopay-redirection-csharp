@@ -2,6 +2,7 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
+using PlacetoPay.Redirection.Validators;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -13,6 +14,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string AMOUNT = "amount";
         protected const string KIND = "kind";
 
+        protected AmountDetailValidator validator = new AmountDetailValidator();
         protected string kind;
         protected double amount;
 

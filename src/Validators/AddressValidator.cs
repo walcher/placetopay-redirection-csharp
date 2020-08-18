@@ -1,5 +1,6 @@
 ﻿using PlacetoPay.Redirection.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlacetoPay.Redirection.Validators
 {
@@ -9,13 +10,13 @@ namespace PlacetoPay.Redirection.Validators
     public class AddressValidator : PersonValidator
     {
         /// <summary>
-        /// Validates if this entity contains the required information.
+        /// Validates if address entity contains the required information.
         /// </summary>
         /// <param name="entity">object</param>
         /// <param name="fields">list</param>
         /// <param name="silent">boold</param>
         /// <returns>bool</returns>
-        public bool IsValid(object entity, out List<string> fields, bool silent)
+        public new bool IsValid(object entity, out List<string> fields, bool silent)
         {
             List<string> errors = new List<string>();
             Address address = (Address)entity;
@@ -45,10 +46,11 @@ namespace PlacetoPay.Redirection.Validators
                 errors.Add("postalCode");
             }
 
-            if (errors != null)
+            if (errors?.Any() ?? false)
             {
                 fields = errors;
                 ThrowValidationException(errors, "Address", silent);
+
                 return false;
             }
 

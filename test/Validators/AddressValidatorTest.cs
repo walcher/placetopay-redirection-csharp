@@ -67,5 +67,29 @@ namespace PlacetoPay.RedirectionTests.Validators
                 Assert.AreEqual("Address", ex.From);
             }
         }
+
+        [Test]
+        public void Should_Fail_When_Wrong_Country_Provided()
+        {
+            string data = JsonConvert.SerializeObject(new
+            {
+                street = "707 Evergreen",
+                city = "Medellín",
+                country = "Colombia",
+                phone = "4442310",
+            });
+
+            JObject json = JObject.Parse(data);
+
+            try
+            {
+                var address = new Address(json).IsValid(out List<string> fields, false);
+            }
+            catch (EntityValidationFailException ex)
+            {
+                Assert.AreEqual(new List<string>() { "country" }, ex.Fields);
+                Assert.AreEqual("Address", ex.From);
+            }
+        }
     }
 }

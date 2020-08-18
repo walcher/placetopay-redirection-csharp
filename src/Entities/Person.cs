@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using PlacetoPay.Redirection.Validators;
+using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -19,6 +21,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string NAME = "name";
         protected const string SURNAME = "surname";
 
+        protected PersonValidator validator = new PersonValidator();
         protected string document;
         protected string documentType;
         protected string name;
@@ -155,6 +158,47 @@ namespace PlacetoPay.Redirection.Entities
         {
             get { return PersonValidator.NormalizePhone(mobile); }
             set { mobile = value; }
+        }
+
+        /// <summary>
+        /// Check if document is bussiness type.
+        /// </summary>
+        /// <returns>bool</returns>
+        public bool IsBusiness()
+        {
+            return document != null && DocumentHelper.BusinessDocument(document);
+        }
+
+        /// <summary>
+        /// Get full document.
+        /// </summary>
+        /// <returns>string</returns>
+        public string FullDocument()
+        {
+            if (document != null)
+            {
+                return $"{documentType} {document}";
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get required fileds.
+        /// </summary>
+        /// <returns>list</returns>
+        public List<string> GetRequiredFields()
+        {
+            List<string> required = new List<string> {
+                "document", "documentType", "name", "email"
+            };
+
+            if (!IsBusiness())
+            {
+                required.Add("surname");
+            }
+
+            return required;
         }
 
         /// <summary>

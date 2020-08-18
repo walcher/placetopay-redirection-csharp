@@ -2,6 +2,7 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
+using PlacetoPay.Redirection.Validators;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -13,6 +14,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string CURRENCY = "currency";
         protected const string TOTAL = "total";
 
+        protected AmountBaseValidator validator = new AmountBaseValidator();
         protected string currency = "COP";
         protected double total;
 

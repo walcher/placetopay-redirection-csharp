@@ -11,8 +11,8 @@ namespace PlacetoPay.Redirection.Validators
     /// </summary>
     public class BaseValidator
     {
-        public const string PATTERN_REFERENCE = @"/^[\d\w\-\.,\$#\/\\\'!]{1,32}$/";
-        public const string PATTERN_DESCRIPTION = @"/^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\s\d\.,\$#\&\-\_(\)\/\%\+\\\']{2,250}$/i";
+        public const string PATTERN_REFERENCE = @"^[\d\w\-\.,\$#\/\\\'!]{1,32}$/";
+        public const string PATTERN_DESCRIPTION = @"^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\s\d\.,\$#\&\-\(_)(\)\/\%\+\\\']{2,250}$";
 
         /// <summary>
         /// Check if the IP is valid.
@@ -76,7 +76,7 @@ namespace PlacetoPay.Redirection.Validators
         /// <returns>bool</returns>
         public static bool MatchPattern(string value, string pattern)
         {
-            Regex re = new Regex(pattern);
+            Regex re = new Regex(pattern, RegexOptions.IgnoreCase);
 
             return !string.IsNullOrEmpty(value) && re.IsMatch(value);
         }
