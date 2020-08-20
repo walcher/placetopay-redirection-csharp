@@ -170,7 +170,12 @@ namespace PlacetoPay.Redirection.Validators
         /// <returns>string</returns>
         public static string ParseDate(string date, string format = "yyyy-MM-ddTHH\\:mm\\:sszzz")
         {
-            return DateTime.Parse(date).ToString(format);
+            if (DateTime.TryParse(date, out DateTime time))
+            {
+                return time.ToString(format);
+            }
+
+            return null;
         }
 
         /// <summary>
