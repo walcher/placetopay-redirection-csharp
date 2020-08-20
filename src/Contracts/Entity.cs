@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Helpers;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace PlacetoPay.Redirection.Contracts
@@ -23,6 +24,9 @@ namespace PlacetoPay.Redirection.Contracts
         protected const string SHIPPING_PROPERTY = "Shipping";
         protected const string STATUS_PROPERTY = "Status";
         protected const string TOKEN_PROPERTY = "Token";
+        protected const string VALIDATOR = "validator";
+
+        private object validatorInstance;
 
         /// <summary>
         /// ToJsonObject static method.
@@ -366,6 +370,63 @@ namespace PlacetoPay.Redirection.Contracts
             propertyInfo.SetValue(this, data);
 
             return this;
+        }
+
+        /// <summary>
+        /// Get validator for current class.
+        /// </summary>
+        /// <returns>dynamic</returns>
+        public dynamic GetValidator()
+        {
+            if (validatorInstance == null)
+            {
+                FieldInfo fieldInfo = GetType().GetField(
+                    VALIDATOR,
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                validatorInstance = fieldInfo.GetValue(this);
+            }
+
+            return validatorInstance;
+        }
+
+        /// <summary>
+        /// Validates if this entity contains the required information.
+        /// </summary>
+        /// <param name="fields">list</param>
+        /// <param name="silent">bool</param>
+        /// <returns>bool</returns>
+        public bool IsValid(out List<string> fields, bool silent)
+        {
+            return GetValidator().IsValid(this, out fields, silent);
+        }
+
+        /// <summary>
+        /// Verifies if the object has all the values required, returns those who are lacking.
+        /// </summary>
+        /// <param name="requiredFields">list</param>
+        /// <returns>list</returns>
+        public List<string> CheckMissingFields(List<string> requiredFields)
+        {
+            List<string> missing = new List<string>();
+
+            foreach (var field in requiredFields)
+            {
+                FieldInfo fieldInfo = GetType().GetField(
+                    field,
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                var value = fieldInfo.GetValue(this);
+
+                if (value == null)
+                {
+                    missing.Add(field);
+                }
+            }
+
+            return missing;
         }
 
         /// <summary>

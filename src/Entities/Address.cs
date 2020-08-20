@@ -2,7 +2,6 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Validators;
-using System;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -18,6 +17,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string STATE = "state";
         protected const string STREET = "street";
 
+        protected AddressValidator validator = new AddressValidator();
         protected string street;
         protected string city;
         protected string state;

@@ -28,6 +28,17 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// CollectRequest constructor.
         /// </summary>
+        public CollectRequest() { }
+
+        /// <summary>
+        /// CollectRequest constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public CollectRequest(string data) : this(JObject.Parse(data)) { }
+
+        /// <summary>
+        /// CollectRequest constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         public CollectRequest(JObject data)
         {
@@ -59,42 +70,6 @@ namespace PlacetoPay.Redirection.Message
             if (data.ContainsKey(FIELDS))
             {
                 this.SetFields<CollectRequest>(data.GetValue(FIELDS).ToObject<JArray>());
-            }
-        }
-
-        /// <summary>
-        /// CollectRequest constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public CollectRequest(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<CollectRequest>(json, new JArray { LOCALE });
-
-            if (json.ContainsKey(PAYER))
-            {
-                SetPayer(json.GetValue(PAYER).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(BUYER))
-            {
-                SetBuyer(json.GetValue(BUYER).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(PAYMENT))
-            {
-                SetPayment(json.GetValue(PAYMENT).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(INSTRUMENT))
-            {
-                SetInstrument(json.GetValue(INSTRUMENT).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(FIELDS))
-            {
-                this.SetFields<CollectRequest>(json.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 

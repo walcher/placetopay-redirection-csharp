@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Validators;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -14,6 +15,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string FIELDS = "fields";
         protected const string REFERENCE = "reference";
 
+        protected SubscriptionValidator validator = new SubscriptionValidator();
         protected string reference;
         protected string description;
         protected List<NameValuePair> fields;
