@@ -27,7 +27,7 @@ namespace PlacetoPay.Redirection.Entities
         /// TaxDetail constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public TaxDetail(string data) : this(JObject.Parse(data)) { }
+        public TaxDetail(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// TaxDetail constructor.

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -21,7 +22,7 @@ namespace PlacetoPay.Redirection.Entities
         /// DispersionPayment constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public DispersionPayment(string data) : this(JObject.Parse(data)) { }
+        public DispersionPayment(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// DispersionPayment constructor.

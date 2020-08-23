@@ -27,7 +27,7 @@ namespace PlacetoPay.Redirection.Entities
         /// AmountConversion constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public AmountConversion(string data) : this(JObject.Parse(data)) { }
+        public AmountConversion(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// AmountConversion constructor.

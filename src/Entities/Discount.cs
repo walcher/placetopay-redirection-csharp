@@ -31,7 +31,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Discount constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Discount(string data) : this(JObject.Parse(data)) { }
+        public Discount(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Discount constructor.

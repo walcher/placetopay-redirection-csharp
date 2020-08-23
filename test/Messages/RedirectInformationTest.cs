@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using PlacetoPay.Redirection.Entities;
+using PlacetoPay.Redirection.Helpers;
 using PlacetoPay.Redirection.Message;
 using System.Globalization;
 
@@ -476,8 +477,7 @@ namespace PlacetoPay.RedirectionTests.Messages
             Assert.AreEqual("12/20", token.GetExpiration());
             Assert.AreEqual(1, token.Installments);
 
-            Assert.AreEqual(JObject.Parse(
-                "{" +
+            Assert.AreEqual(JsonFormatter.ParseJObject("{" +
                     "\"status\": {" +
                         "\"status\": \"OK\"," +
                         "\"reason\": \"00\"," +
@@ -497,7 +497,7 @@ namespace PlacetoPay.RedirectionTests.Messages
         [Test]
         public void Should_Parse_A_Cancelled_Subscription_Rest_Response()
         {
-            string result = 
+            string result =
             "{" +
             "   \"requestId\":373," +
             "   \"status\":" +

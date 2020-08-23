@@ -25,7 +25,7 @@ namespace PlacetoPay.Redirection.Extensions
                 {
                     JsonReader reader = new JsonTextReader(new StringReader(jsonData.ToString()))
                     {
-                        DateParseHandling = DateParseHandling.None
+                        DateParseHandling = DateParseHandling.None,
                     };
 
                     JObject data = JObject.Load(reader);

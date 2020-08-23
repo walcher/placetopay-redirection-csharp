@@ -7,7 +7,7 @@ using PlacetoPay.Redirection.Message;
 namespace PlacetoPay.RedirectionTests.Messages
 {
     [TestFixture]
-    public class NotificationTest
+    public class NotificationTest : BaseTestCase
     {
         [Test]
         public void Should_Parse_Correctly_The_Notification()
@@ -67,6 +67,34 @@ namespace PlacetoPay.RedirectionTests.Messages
             Assert.False(notification.IsRejected(), notification.GetStatus().StatusText);
             Assert.AreEqual(notification.RequestId, 83, "Same request identifier");
             Assert.AreEqual(notification.Reference, "TEST_20161010_213937", "Same reference");
+        }
+
+        [Test]
+        public void Should_Parse_A_Notification_Post()
+        {
+            JObject data = new JObject
+            {
+                {
+                    "status", new JObject
+                    {
+                        { "status", "REJECTED" },
+                        { "reason", "?C" },
+                        { "message", "El proceso de pago ha sido cancelado por el usuario" },
+                        { "date", "2016-10-12T01:44:37-05:00" },
+                    }
+                },
+                { "requestId", "126" },
+                { "reference", "100000071" },
+                { "signature", "554fa6c36bd5d1376b192b8bc3a1e3dd9a01e448" },
+            };
+
+            var gateway = GetGateway(new JObject 
+            {
+                { "url", "https://testing.com" },
+                { "tranKey", "024h1IlD" },
+            });
+
+            Assert.IsTrue(true);
         }
     }
 }

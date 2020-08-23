@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace PlacetoPay.Redirection.Helpers
 {
@@ -10,10 +12,17 @@ namespace PlacetoPay.Redirection.Helpers
         /// <summary>
         /// Remove null and empty data from json.
         /// </summary>
-        /// <param name="token">JToken</param>
+        /// <param name="data">object</param>
         /// <returns>JToken</returns>
-        public static JToken RemoveNullOrEmpty(JToken token)
+        public static JToken RemoveNullOrEmpty(object data)
         {
+            JsonReader reader = new JsonTextReader(new StringReader(data.ToString()))
+            {
+                DateParseHandling = DateParseHandling.None
+            };
+
+            JToken token = JToken.ReadFrom(reader);
+
             if (token.Type == JTokenType.Object)
             {
                 JObject copy = new JObject();
@@ -71,6 +80,21 @@ namespace PlacetoPay.Redirection.Helpers
                 (token.Type == JTokenType.Integer && (int)token == 0) ||
                 (token.Type == JTokenType.Array && !token.HasValues) ||
                 (token.Type == JTokenType.Object && !token.HasValues);
+        }
+
+        /// <summary>
+        /// Parse json from string.
+        /// </summary>
+        /// <param name="data">string</param>
+        /// <returns>JObject</returns>
+        public static JObject ParseJObject(string data)
+        {
+            JsonReader reader = new JsonTextReader(new StringReader(data))
+            {
+                DateParseHandling = DateParseHandling.None
+            };
+
+            return JObject.Load(reader);
         }
     }
 }

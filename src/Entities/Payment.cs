@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using PlacetoPay.Redirection.Validators;
 using System.Collections.Generic;
 
@@ -51,7 +52,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Payment constructor.
         /// </summary>
         /// <param name="data"></param>
-        public Payment(string data) : this(JObject.Parse(data)) { }
+        public Payment(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Payment constructor.

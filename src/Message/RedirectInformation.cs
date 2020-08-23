@@ -2,6 +2,7 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,7 +35,7 @@ namespace PlacetoPay.Redirection.Message
         /// RedirectInformation constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public RedirectInformation(string data) : this(JObject.Parse(data)) { }
+        public RedirectInformation(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// RedirectInformation constructor.
