@@ -111,8 +111,8 @@ namespace PlacetoPay.Redirection
             {
                 var carrierConfig = new JObject
                 {
-                    { "wsdl", $"{config["url"]}soap/redirect?wsdl" },
-                    { "location", $"{config["url"]}soap/redirect" },
+                    { "wsdl", $"{config[URL]}soap/redirect?wsdl" },
+                    { "location", $"{config[URL]}soap/redirect" },
                 };
 
                 carrierConfig.Merge(typeConfig, new JsonMergeSettings
@@ -126,7 +126,7 @@ namespace PlacetoPay.Redirection
             {
                 var carrierConfig = new JObject
                 {
-                    { "url", config.GetValue("url").ToString() },
+                    { URL, config.GetValue(URL).ToString() },
                 };
 
                 carrierConfig.Merge(typeConfig, new JsonMergeSettings
@@ -165,19 +165,49 @@ namespace PlacetoPay.Redirection
             return Carrier().Collect((CollectRequest)collectRequest);
         }
 
+        /// <summary>
+        /// Query endpoint.
+        /// </summary>
+        /// <param name="requestId">string</param>
+        /// <returns>RedirectInformation</returns>
         public override RedirectInformation Query(string requestId)
         {
-            throw new NotImplementedException();
+            return Carrier().Query(requestId);
         }
 
+        /// <summary>
+        /// Request endpoint.
+        /// </summary>
+        /// <param name="redirectRequest">object</param>
+        /// <returns>RedirectResponse</returns>
         public override RedirectResponse Request(object redirectRequest)
         {
-            throw new NotImplementedException();
+            if (redirectRequest.GetType() == typeof(string))
+            {
+                redirectRequest = new RedirectRequest((string)redirectRequest);
+            }
+
+            if (redirectRequest.GetType() == typeof(string))
+            {
+                redirectRequest = new RedirectRequest((JObject)redirectRequest);
+            }
+
+            if (!(redirectRequest.GetType() == typeof(RedirectRequest)))
+            {
+                throw new PlacetoPayException("Wrong class request");
+            }
+
+            return Carrier().Request((RedirectRequest)redirectRequest);
         }
 
+        /// <summary>
+        /// Reverse endpoint.
+        /// </summary>
+        /// <param name="transactionId">string</param>
+        /// <returns>ReverseResponse</returns>
         public override ReverseResponse Reverse(string transactionId)
         {
-            throw new NotImplementedException();
+            return Carrier().Reverse(transactionId);
         }
     }
 }

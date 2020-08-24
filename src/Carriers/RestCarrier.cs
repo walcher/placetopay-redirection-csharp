@@ -95,13 +95,13 @@ namespace PlacetoPay.Redirection.Carriers
                     throw new PlacetoPayException("No valid method for this request");
                 }
 
-                if (response.IsSuccessful)
+                if (!response.IsSuccessful && response.ErrorMessage != null)
                 {
-                    return response.Content;
+                    throw new PlacetoPayException(response.ErrorException.Message);
                 }
                 else
                 {
-                    throw new PlacetoPayException(response.ErrorException.Message);
+                    return response.Content;
                 }
             }
             catch (Exception ex)

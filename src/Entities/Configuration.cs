@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
+using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Helpers;
 using System;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
 {
-    public class Configuration
+    public class Configuration : Entity
     {
         protected const string LOGIN = "login";
         protected const string TRANKEY = "tranKey";
@@ -132,6 +133,11 @@ namespace PlacetoPay.Redirection.Entities
         {
             get { return soapVersion; }
             set { soapVersion = value; }
+        }
+
+        public override JObject ToJsonObject()
+        {
+            throw new NotImplementedException();
         }
     }
 }

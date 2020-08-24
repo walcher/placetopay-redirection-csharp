@@ -48,7 +48,7 @@ namespace PlacetoPay.Redirection.Contracts
                 throw new PlacetoPayException("No login or tranKey provided on gateway");
             }
 
-            if (!data.ContainsKey(URL) || !BaseValidator.IsValidUrl(data.GetValue("url").ToString()))
+            if (!data.ContainsKey(URL) || !BaseValidator.IsValidUrl(data.GetValue(URL).ToString()))
             {
                 throw new PlacetoPayException("No service URL provided to use");
             }
@@ -203,9 +203,9 @@ namespace PlacetoPay.Redirection.Contracts
                 throw new PlacetoPayException("The notification content is empty");
             }
 
-            if (content is JObject @object)
+            if (content is JObject data)
             {
-                return new Notification(@object, config.GetValue(TRANKEY).ToString()); ;
+                return new Notification(data, config.GetValue(TRANKEY).ToString()); ;
             }
 
             return new Notification((string)content, config.GetValue(TRANKEY).ToString()); ;
