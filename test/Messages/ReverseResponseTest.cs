@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using PlacetoPay.Redirection.Message;
+using PlacetoPay.Redirection.Messages;
 
 namespace PlacetoPay.RedirectionTests.Messages
 {

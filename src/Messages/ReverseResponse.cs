@@ -3,7 +3,7 @@ using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Helpers;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>ReverseResponse</c>

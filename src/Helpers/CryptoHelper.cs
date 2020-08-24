@@ -73,7 +73,7 @@ namespace PlacetoPay.Redirection.Helpers
         /// </summary>
         /// <param name="size">int</param>
         /// <returns>string</returns>
-        public static string MakeRandom(int size = 16)
+        public static string MakeRandom(int size = 32)
         {
             const string src = "abcdefghijklmnopqrstuvwxyz0123456789";
             var stringBuilder = new StringBuilder();

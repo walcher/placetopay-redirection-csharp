@@ -64,7 +64,7 @@ namespace PlacetoPay.Redirection.Entities
                     throw new PlacetoPayException("Bad definition for the override");
                 }
 
-                auth = new AuthenticationSecurity(data.GetValue(AUTH).ToObject<JObject>());
+                auth = new AuthenticationSecurity(data.GetValue(AUTH).ToString());
                 overrided = true;
             }
 

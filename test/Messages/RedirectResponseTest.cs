@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using PlacetoPay.Redirection.Message;
+using PlacetoPay.Redirection.Messages;
 using System;
 
 namespace PlacetoPay.RedirectionTests.Messages

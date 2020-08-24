@@ -5,7 +5,7 @@ using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>CollectRequest</c>

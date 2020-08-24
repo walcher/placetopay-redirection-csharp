@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Helpers;
-using PlacetoPay.Redirection.Message;
+using PlacetoPay.Redirection.Messages;
 using System.Globalization;
 
 namespace PlacetoPay.RedirectionTests.Messages

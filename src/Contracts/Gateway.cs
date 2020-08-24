@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
+using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Exceptions;
-using PlacetoPay.Redirection.Message;
+using PlacetoPay.Redirection.Messages;
 using PlacetoPay.Redirection.Validators;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PlacetoPay.Redirection.Contracts
@@ -70,8 +72,55 @@ namespace PlacetoPay.Redirection.Contracts
         /// <param name="login">string</param>
         /// <param name="trankey">string</param>
         /// <param name="url">Uri</param>
+        public Gateway(string login, string trankey, Uri url) : this(login, trankey, url, TP_REST) { }
+
+        /// <summary>
+        /// Gateway constructor.
+        /// </summary>
+        /// <param name="login">string</param>
+        /// <param name="trankey">string</param>
+        /// <param name="url">Uri</param>
         /// <param name="requestType">string</param>
-        public Gateway(string login, string trankey, Uri url, string requestType = TP_REST)
+        public Gateway(
+            string login,
+            string trankey,
+            Uri url,
+            string requestType = TP_REST
+            ) : this(login, trankey, url, new Dictionary<string, string>(), requestType) { }
+
+        /// <summary>
+        /// Gateway constructor.
+        /// </summary>
+        /// <param name="login">string</param>
+        /// <param name="trankey">string</param>
+        /// <param name="url">Uri</param>
+        /// <param name="additional">Dictionary</param>
+        /// <param name="requestType">string</param>
+        public Gateway(
+            string login,
+            string trankey,
+            Uri url,
+            Dictionary<string, string> additional,
+            string requestType = TP_REST
+            ) : this(login, trankey, url, null, additional, requestType) { }
+
+        /// <summary>
+        /// Gateway constructor.
+        /// </summary>
+        /// <param name="login">string</param>
+        /// <param name="trankey">string</param>
+        /// <param name="url">Uri</param>
+        /// <param name="auth">AuthenticationSecurity</param>
+        /// <param name="additional">Dictionary</param>
+        /// <param name="requestType">string</param>
+        public Gateway(
+            string login,
+            string trankey,
+            Uri url,
+            AuthenticationSecurity auth,
+            Dictionary<string, string> additional,
+            string requestType = TP_REST
+            )
         {
             if (login == null || trankey == null)
             {
@@ -100,9 +149,9 @@ namespace PlacetoPay.Redirection.Contracts
         /// <summary>
         /// Redirect request process.
         /// </summary>
-        /// <param name="redirectRequest">RedirectRequest</param>
+        /// <param name="redirectRequest">object</param>
         /// <returns>RedirectResponse</returns>
-        public abstract RedirectResponse Request(RedirectRequest redirectRequest);
+        public abstract RedirectResponse Request(object redirectRequest);
 
         /// <summary>
         /// Query request process.
@@ -114,9 +163,9 @@ namespace PlacetoPay.Redirection.Contracts
         /// <summary>
         /// Collect request process.
         /// </summary>
-        /// <param name="collectRequest">CollectRequest</param>
+        /// <param name="collectRequest">object</param>
         /// <returns>RedirectInformation</returns>
-        public abstract RedirectInformation Collect(CollectRequest collectRequest);
+        public abstract RedirectInformation Collect(object collectRequest);
 
         /// <summary>
         /// Reverse request process.
@@ -145,16 +194,21 @@ namespace PlacetoPay.Redirection.Contracts
         /// <summary>
         /// Read notification from response.
         /// </summary>
-        /// <param name="content">string</param>
+        /// <param name="content">object</param>
         /// <returns>Notification</returns>
-        public Notification ReadNotification(string content)
+        public Notification ReadNotification(object content)
         {
             if (content == null)
             {
                 throw new PlacetoPayException("The notification content is empty");
             }
 
-            return new Notification(content, config.GetValue(TRANKEY).ToString()); ;
+            if (content is JObject @object)
+            {
+                return new Notification(@object, config.GetValue(TRANKEY).ToString()); ;
+            }
+
+            return new Notification((string)content, config.GetValue(TRANKEY).ToString()); ;
         }
 
         /// <summary>

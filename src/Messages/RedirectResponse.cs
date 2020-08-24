@@ -4,7 +4,7 @@ using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>RedirectResponse</c>

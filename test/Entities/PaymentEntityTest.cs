@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using PlacetoPay.Redirection.Message;
+using PlacetoPay.Redirection.Messages;
 using System;
 using System.IO;
 

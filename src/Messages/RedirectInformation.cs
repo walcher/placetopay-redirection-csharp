@@ -6,7 +6,7 @@ using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>RedirectInformation</c>
