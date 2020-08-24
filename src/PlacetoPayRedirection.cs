@@ -152,7 +152,7 @@ namespace PlacetoPay.Redirection
                 collectRequest = new CollectRequest((string)collectRequest);
             }
 
-            if (collectRequest.GetType() == typeof(string))
+            if (collectRequest.GetType() == typeof(JObject))
             {
                 collectRequest = new CollectRequest((JObject)collectRequest);
             }
@@ -187,7 +187,7 @@ namespace PlacetoPay.Redirection
                 redirectRequest = new RedirectRequest((string)redirectRequest);
             }
 
-            if (redirectRequest.GetType() == typeof(string))
+            if (redirectRequest.GetType() == typeof(JObject))
             {
                 redirectRequest = new RedirectRequest((JObject)redirectRequest);
             }
