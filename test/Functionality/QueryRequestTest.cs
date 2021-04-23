@@ -11,7 +11,20 @@ namespace PlacetoPay.RedirectionTests.Functionality
         {
             var gateway = GetGateway(new JObject
             {
-                { "rest", new JObject { { "timeout", 45000 }, { "connect_timeout", 30000 } } },
+                { "additional", new JObject { { "timeout", 45000 }, { "connect_timeout", 30000 } } },
+            });
+
+            var response = gateway.Query("340097");
+
+            Assert.True(response.IsSuccessful());
+        }
+
+        [Test]
+        public void Should_Make_Soap_Query_Request()
+        {
+            var gateway = GetGateway(new JObject
+            {
+                { "type", "soap" },
             });
 
             var response = gateway.Query("340097");

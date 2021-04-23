@@ -256,9 +256,20 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Convert data to soap header.
         /// </summary>
-        public void AsSoapHeader()
+        /// <returns>String soap security header</returns>
+        public string AsSoapHeader()
         {
-
+            string header = @"
+            <wsse:Security xml:mustUnderstand=""1"" xmlns:wsse=""{1}"">
+                <wsse:UsernameToken wsu:Id=""UsernameToken"" xmlns:wsu=""{0}"">
+                    <wsse:Username>{2}</wsse:Username>
+        		    <wsse:Password>{3}</wsse:Password>
+        		    <wsse:Nonce>{4}</wsse:Nonce>
+        		    <wsu:Created>{5}</wsu:Created>
+                </wsse:UsernameToken>
+            </wsse:Security>";
+            
+            return string.Format(header, WSU, WSSE, Login, Digest(), GetNonce(), GetSeed());
         }
 
         /// <summary>
