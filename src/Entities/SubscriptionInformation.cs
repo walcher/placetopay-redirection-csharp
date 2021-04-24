@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -30,7 +31,7 @@ namespace PlacetoPay.Redirection.Entities
         /// SubscriptionInformation constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public SubscriptionInformation(string data) : this(JObject.Parse(data)) { }
+        public SubscriptionInformation(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// SubscriptionInformation constructor.

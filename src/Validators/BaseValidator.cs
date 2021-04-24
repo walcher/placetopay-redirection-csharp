@@ -179,6 +179,17 @@ namespace PlacetoPay.Redirection.Validators
         }
 
         /// <summary>
+        /// Check if url is a valid one.
+        /// </summary>
+        /// <param name="url">string</param>
+        /// <returns>bool</returns>
+        public static bool IsValidUrl(string url)
+        {
+            return Uri.TryCreate(url, UriKind.Absolute, out Uri uri)
+                && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+        }
+
+        /// <summary>
         /// Throw exception.
         /// </summary>
         /// <param name="fields">List</param>

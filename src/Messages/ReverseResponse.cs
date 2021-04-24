@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
+using PlacetoPay.Redirection.Helpers;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>ReverseResponse</c>
@@ -24,7 +25,7 @@ namespace PlacetoPay.Redirection.Message
         /// ReverseResponse constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public ReverseResponse(string data) : this(JObject.Parse(data)) { }
+        public ReverseResponse(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// ReverseResponse constructor.

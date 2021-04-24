@@ -2,9 +2,10 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>CollectRequest</c>
@@ -34,7 +35,7 @@ namespace PlacetoPay.Redirection.Message
         /// CollectRequest constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public CollectRequest(string data) : this(JObject.Parse(data)) { }
+        public CollectRequest(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// CollectRequest constructor.

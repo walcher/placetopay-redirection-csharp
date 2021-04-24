@@ -27,7 +27,7 @@ namespace PlacetoPay.Redirection.Entities
         /// AmountBase construnctor.
         /// </summary>
         /// <param name="data">string</param>
-        public AmountBase(string data) : this(JObject.Parse(data)) { }
+        public AmountBase(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// AmountBase construnctor.

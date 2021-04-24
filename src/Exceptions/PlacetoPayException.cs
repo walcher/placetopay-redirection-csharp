@@ -9,6 +9,12 @@ namespace PlacetoPay.Redirection.Exceptions
     public class PlacetoPayException : Exception
     {
         /// <summary>
+        /// PlacetoPayException constructor.
+        /// </summary>
+        /// <param name="message"></param>
+        public PlacetoPayException(string message) : base(message) { }
+
+        /// <summary>
         /// Get formatted exception.
         /// </summary>
         /// <param name="ex">exception</param>

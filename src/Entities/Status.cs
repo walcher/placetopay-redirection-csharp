@@ -51,7 +51,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Status constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Status(string data) : this(JObject.Parse(data)) { }
+        public Status(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Status constructor.

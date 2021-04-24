@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using PlacetoPay.Redirection.Validators;
 using System;
 
@@ -36,7 +37,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Recurring constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Recurring(string data) : this(JObject.Parse(data)) { }
+        public Recurring(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Recurring constructor.

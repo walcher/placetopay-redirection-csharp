@@ -403,7 +403,7 @@ namespace PlacetoPay.Redirection.Contracts
         }
 
         /// <summary>
-        /// Verifies if the object has all the values required, returns those who are lacking.
+        /// Verifies if the object has all the required values, returns those who are lacking.
         /// </summary>
         /// <param name="requiredFields">list</param>
         /// <returns>list</returns>
@@ -436,9 +436,9 @@ namespace PlacetoPay.Redirection.Contracts
         /// <returns>JObject</returns>
         public static JObject JObjectFilter(JObject data)
         {
-            string json = JsonFormatter.RemoveNullOrEmpty(JToken.Parse(data.ToString())).ToString();
+            string json = JsonFormatter.RemoveNullOrEmpty(data).ToString();
 
-            return JObject.Parse(json);
+            return JsonFormatter.ParseJObject(json);
         }
     }
 }

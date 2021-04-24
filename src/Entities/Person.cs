@@ -40,7 +40,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Person constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Person(string data) : this(JObject.Parse(data)) { }
+        public Person(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Person constructor.

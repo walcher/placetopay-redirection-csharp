@@ -5,7 +5,7 @@ using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
 using System.Text;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>Notification</c>
@@ -33,7 +33,7 @@ namespace PlacetoPay.Redirection.Message
         /// </summary>
         /// <param name="data">string</param>
         /// <param name="tranKey">string</param>
-        public Notification(string data, string tranKey = "") : this(JObject.Parse(data), tranKey) { }
+        public Notification(string data, string tranKey = "") : this(JsonFormatter.ParseJObject(data), tranKey) { }
 
         /// <summary>
         /// Notification constructor.
@@ -125,7 +125,7 @@ namespace PlacetoPay.Redirection.Message
         /// <returns>string</returns>
         public string MakeSignature()
         {
-            return CryptoHelper.MakeSHA1(new StringBuilder().Append(RequestId)
+            return (string)CryptoHelper.ComputeHash(new StringBuilder().Append(RequestId)
                 .Append(this.GetStatus<Notification>().StatusText)
                 .Append(this.GetStatus<Notification>().Date)
                 .Append(tranKey)
