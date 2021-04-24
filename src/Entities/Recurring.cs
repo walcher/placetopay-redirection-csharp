@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
+using PlacetoPay.Redirection.Validators;
 using System;
 
 namespace PlacetoPay.Redirection.Entities
@@ -18,6 +20,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string NOTIFICATION_URL = "notificationUrl";
         protected const string PERIODICITY = "periodicity";
 
+        protected RecurringValidator validator = new RecurringValidator();
         protected string periodicity;
         protected int interval;
         protected string nextPayment;
@@ -34,7 +37,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Recurring constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Recurring(string data) : this(JObject.Parse(data)) { }
+        public Recurring(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Recurring constructor.
@@ -46,12 +49,12 @@ namespace PlacetoPay.Redirection.Entities
 
             if (data.ContainsKey(NEXT_PAYMENT))
             {
-                nextPayment = DateTime.Parse((string)data.GetValue(NEXT_PAYMENT)).ToString(DATE_FORMAT);
+                nextPayment = BaseValidator.ParseDate((string)data.GetValue(NEXT_PAYMENT), DATE_FORMAT);
             }
 
             if (data.ContainsKey(DUE_DATE))
             {
-                dueDate = DateTime.Parse((string)data.GetValue(DUE_DATE)).ToString(DATE_FORMAT);
+                dueDate = BaseValidator.ParseDate((string)data.GetValue(DUE_DATE), DATE_FORMAT);
             }
         }
 

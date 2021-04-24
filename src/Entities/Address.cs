@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using PlacetoPay.Redirection.Validators;
-using System;
 
 namespace PlacetoPay.Redirection.Entities
 {
@@ -18,6 +18,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string STATE = "state";
         protected const string STREET = "street";
 
+        protected AddressValidator validator = new AddressValidator();
         protected string street;
         protected string city;
         protected string state;
@@ -34,7 +35,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Address constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Address(string data) : this(JObject.Parse(data)) { }
+        public Address(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Address constructor.

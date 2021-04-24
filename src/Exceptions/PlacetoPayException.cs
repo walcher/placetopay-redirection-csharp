@@ -1,0 +1,30 @@
+﻿using System;
+using System.Diagnostics;
+
+namespace PlacetoPay.Redirection.Exceptions
+{
+    /// <summary>
+    /// Class <c>PlacetoPayException</c>
+    /// </summary>
+    public class PlacetoPayException : Exception
+    {
+        /// <summary>
+        /// PlacetoPayException constructor.
+        /// </summary>
+        /// <param name="message"></param>
+        public PlacetoPayException(string message) : base(message) { }
+
+        /// <summary>
+        /// Get formatted exception.
+        /// </summary>
+        /// <param name="ex">exception</param>
+        /// <returns>string</returns>
+        public static string ReadException(Exception ex)
+        {
+            var st = new StackTrace(ex, true);
+            var frame = st.GetFrame(0);
+
+            return $"{ex.Message} ON {frame.GetFileName()} LINE {frame.GetFileLineNumber()} [ {ex.TargetSite.ReflectedType.Name} ]";
+        }
+    }
+}

@@ -5,7 +5,7 @@ using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
 using System.Text;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>Notification</c>
@@ -26,6 +26,18 @@ namespace PlacetoPay.Redirection.Message
         /// <summary>
         /// Notification constructor.
         /// </summary>
+        public Notification() { }
+
+        /// <summary>
+        /// Notification constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        /// <param name="tranKey">string</param>
+        public Notification(string data, string tranKey = "") : this(JsonFormatter.ParseJObject(data), tranKey) { }
+
+        /// <summary>
+        /// Notification constructor.
+        /// </summary>
         /// <param name="data">JObject</param>
         /// <param name="tranKey">string</param>
         public Notification(JObject data, string tranKey = "")
@@ -35,25 +47,6 @@ namespace PlacetoPay.Redirection.Message
             if (data.ContainsKey(STATUS))
             {
                 SetStatus(data.GetValue(STATUS).ToObject<JObject>());
-            }
-
-            this.tranKey = tranKey;
-        }
-
-        /// <summary>
-        /// Notification constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        /// <param name="tranKey">string</param>
-        public Notification(string data, string tranKey = "")
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<Notification>(json, new JArray { REQUEST_ID, REFERENCE, SIGNATURE });
-
-            if (json.ContainsKey(STATUS))
-            {
-                SetStatus(json.GetValue(STATUS).ToObject<JObject>());
             }
 
             this.tranKey = tranKey;
@@ -132,7 +125,7 @@ namespace PlacetoPay.Redirection.Message
         /// <returns>string</returns>
         public string MakeSignature()
         {
-            return CryptoHelper.MakeSHA1(new StringBuilder().Append(RequestId)
+            return (string)CryptoHelper.ComputeHash(new StringBuilder().Append(RequestId)
                 .Append(this.GetStatus<Notification>().StatusText)
                 .Append(this.GetStatus<Notification>().Date)
                 .Append(tranKey)

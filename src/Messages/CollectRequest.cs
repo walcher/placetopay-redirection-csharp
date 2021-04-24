@@ -2,9 +2,10 @@
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Entities;
 using PlacetoPay.Redirection.Extensions;
+using PlacetoPay.Redirection.Helpers;
 using System.Collections.Generic;
 
-namespace PlacetoPay.Redirection.Message
+namespace PlacetoPay.Redirection.Messages
 {
     /// <summary>
     /// Class <c>CollectRequest</c>
@@ -24,6 +25,17 @@ namespace PlacetoPay.Redirection.Message
         protected Payment payment;
         protected Instrument instrument;
         protected List<NameValuePair> fields;
+
+        /// <summary>
+        /// CollectRequest constructor.
+        /// </summary>
+        public CollectRequest() { }
+
+        /// <summary>
+        /// CollectRequest constructor.
+        /// </summary>
+        /// <param name="data">string</param>
+        public CollectRequest(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// CollectRequest constructor.
@@ -59,42 +71,6 @@ namespace PlacetoPay.Redirection.Message
             if (data.ContainsKey(FIELDS))
             {
                 this.SetFields<CollectRequest>(data.GetValue(FIELDS).ToObject<JArray>());
-            }
-        }
-
-        /// <summary>
-        /// CollectRequest constructor.
-        /// </summary>
-        /// <param name="data">string</param>
-        public CollectRequest(string data)
-        {
-            JObject json = JObject.Parse(data);
-
-            this.Load<CollectRequest>(json, new JArray { LOCALE });
-
-            if (json.ContainsKey(PAYER))
-            {
-                SetPayer(json.GetValue(PAYER).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(BUYER))
-            {
-                SetBuyer(json.GetValue(BUYER).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(PAYMENT))
-            {
-                SetPayment(json.GetValue(PAYMENT).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(INSTRUMENT))
-            {
-                SetInstrument(json.GetValue(INSTRUMENT).ToObject<JObject>());
-            }
-
-            if (json.ContainsKey(FIELDS))
-            {
-                this.SetFields<CollectRequest>(json.GetValue(FIELDS).ToObject<JArray>());
             }
         }
 

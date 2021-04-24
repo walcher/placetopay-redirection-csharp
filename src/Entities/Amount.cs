@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using PlacetoPay.Redirection.Helpers;
+using PlacetoPay.Redirection.Validators;
 using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection.Entities
@@ -12,6 +14,7 @@ namespace PlacetoPay.Redirection.Entities
         protected const string DETAILS = "details";
         protected const string TAXES = "taxes";
 
+        protected new AmountValidator validator = new AmountValidator();
         protected List<TaxDetail> taxes;
         protected List<AmountDetail> details;
         protected double taxAmount;
@@ -25,7 +28,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Amount constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Amount(string data) : this(JObject.Parse(data)) { }
+        public Amount(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Amount constructor.

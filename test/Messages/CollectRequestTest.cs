@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using PlacetoPay.Redirection.Entities;
-using PlacetoPay.Redirection.Message;
+using PlacetoPay.Redirection.Messages;
 
 namespace PlacetoPay.RedirectionTests.Messages
 {

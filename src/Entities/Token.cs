@@ -43,7 +43,7 @@ namespace PlacetoPay.Redirection.Entities
         /// Token constructor.
         /// </summary>
         /// <param name="data">string</param>
-        public Token(string data) : this(JObject.Parse(data)) { }
+        public Token(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Token constructor.
