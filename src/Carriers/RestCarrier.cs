@@ -160,11 +160,11 @@ namespace PlacetoPay.Redirection.Carriers
         /// <summary>
         /// Make reverse endpoint.
         /// </summary>
-        /// <param name="transactionId">string</param>
+        /// <param name="internalReference">string</param>
         /// <returns>ReverseResponse</returns>
-        public override ReverseResponse Reverse(string transactionId)
+        public override ReverseResponse Reverse(string internalReference)
         {
-            string result = MakeRequest("POST", "api/reverse", new JObject { { "internalReference", transactionId } });
+            string result = MakeRequest("POST", "api/reverse", new JObject { { "internalReference", internalReference } });
 
             return new ReverseResponse(result);
         }

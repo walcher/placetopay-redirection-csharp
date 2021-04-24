@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace PlacetoPay.RedirectionTests.Functionality
 {
     [TestFixture, Ignore("query")]
-    public class QueryRequestTest : BaseTestCase
+    public class QueryServiceTest : BaseTestCase
     {
         [Test]
         public void Should_Make_Query_Request()

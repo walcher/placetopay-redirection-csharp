@@ -111,7 +111,6 @@ namespace PlacetoPay.Redirection
             {
                 var carrierConfig = new JObject
                 {
-                    { "wsdl", $"{config[URL]}soap/redirect?wsdl" },
                     { "location", $"{config[URL]}soap/redirect" },
                 };
 

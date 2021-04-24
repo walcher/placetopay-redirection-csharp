@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PlacetoPay.Redirection.Contracts;
 using PlacetoPay.Redirection.Extensions;
 using PlacetoPay.Redirection.Helpers;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 namespace PlacetoPay.Redirection.Entities
 {
     /// <summary>
-    /// Class <c>Transaction</c>
+    /// Class <c>Transaction</c> get parsed transaction data.
     /// </summary>
     public class Transaction : Entity
     {
@@ -41,20 +42,20 @@ namespace PlacetoPay.Redirection.Entities
         protected List<NameValuePair> processorFields;
 
         /// <summary>
-        /// Transaction constructor.
+        /// Initializes a new instance of the Transaction class.
         /// </summary>
         public Transaction() { }
 
         /// <summary>
-        /// Transaction constructor.
+        /// Initializes a new instance of the Transaction class.
         /// </summary>
-        /// <param name="data">string</param>
+        /// <param name="data">string data.</param>
         public Transaction(string data) : this(JObject.Parse(data)) { }
 
         /// <summary>
-        /// Transaction constructor.
+        /// Initializes a new instance of the Transaction class.
         /// </summary>
-        /// <param name="data">JObject</param>
+        /// <param name="data">json object data.</param>
         public Transaction(JObject data)
         {
             this.Load<Transaction>(data, new JArray { REFERENCE, INTERNAL_REFERENCE, PAYMENT_METHOD, PAYMENT_METHOD_NAME, ISSUER_NAME, AUTHORIZATION, RECEIPT, FRANCHISE, REFUNDED });
@@ -71,7 +72,7 @@ namespace PlacetoPay.Redirection.Entities
 
             if (data.ContainsKey(PROCESSOR_FIELDS))
             {
-                SetProcessorFields(data.GetValue(PROCESSOR_FIELDS).ToObject<JArray>());
+                SetProcessorFields(JsonConvert.DeserializeObject(data.GetValue(PROCESSOR_FIELDS).ToString()));
             }
 
             if (data.ContainsKey(DISCOUNT))
@@ -81,20 +82,20 @@ namespace PlacetoPay.Redirection.Entities
         }
 
         /// <summary>
-        /// Transaction constructor.
+        /// Initializes a new instance of the Transaction class.
         /// </summary>
-        /// <param name="status">Status</param>
-        /// <param name="reference">string</param>
-        /// <param name="internalReference">int</param>
-        /// <param name="paymentMethod">string</param>
-        /// <param name="paymentMethodName">string</param>
-        /// <param name="issuerName">string</param>
-        /// <param name="amount">AmountConversion</param>
-        /// <param name="authorization">string</param>
-        /// <param name="receipt">long</param>
-        /// <param name="franchise">string</param>
-        /// <param name="refunded">bool</param>
-        /// <param name="processorFields">List</param>
+        /// <param name="status">Status onject.</param>
+        /// <param name="reference">string reference.</param>
+        /// <param name="internalReference">int internal reference.</param>
+        /// <param name="paymentMethod">string payment method.</param>
+        /// <param name="paymentMethodName">string paymen method name.</param>
+        /// <param name="issuerName">string issuer name.</param>
+        /// <param name="amount">AmountConversion object.</param>
+        /// <param name="authorization">string authorization code.</param>
+        /// <param name="receipt">long receip number.</param>
+        /// <param name="franchise">string franchise.</param>
+        /// <param name="refunded">bool refunded.</param>
+        /// <param name="processorFields">List of NameValuePair objects.</param>
         public Transaction(
             Status status,
             string reference,
@@ -244,8 +245,8 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set amount property data.
         /// </summary>
-        /// <param name="data">object</param>
-        /// <returns>object</returns>
+        /// <param name="data">amount object data.</param>
+        /// <returns>Transaction current instance.</returns>
         public new Transaction SetAmount(object data)
         {
             if (data.GetType() == typeof(JObject))
@@ -266,35 +267,36 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set processor fields property data.
         /// </summary>
-        /// <param name="data">object</param>
-        /// <returns>object</returns>
+        /// <param name="data">processor fields data, can be JObject or JArray.</param>
+        /// <returns>Transaction current instance.</returns>
         public Transaction SetProcessorFields(object data)
         {
+            processorFields = new List<NameValuePair>();
+
             if (data.GetType() == typeof(JObject))
             {
                 JObject item = (JObject)data;
 
                 if (item.ContainsKey(ITEM))
                 {
-                    data = item.GetValue(ITEM).ToObject<JArray>();
+                    data = JsonConvert.DeserializeObject(item.GetValue(ITEM).ToString());
+
+                    if (data.GetType() == typeof(JObject))
+                    {
+                        data = new JArray(data);
+                    }
                 }
             }
 
             if (data.GetType() == typeof(JArray))
             {
-                List<NameValuePair> list = new List<NameValuePair>();
+                JArray fields = (JArray)data;
 
-                foreach (var nvp in (JArray)data)
+                foreach (JObject nvp in fields)
                 {
-                    JObject item = nvp.ToObject<JObject>();
-
-                    list.Add(new NameValuePair(item));
+                    processorFields.Add(new NameValuePair(nvp));
                 }
-
-                data = list;
             }
-
-            processorFields = (List<NameValuePair>)data;
 
             return this;
         }
@@ -302,8 +304,8 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set discount property data.
         /// </summary>
-        /// <param name="data">object</param>
-        /// <returns>object</returns>
+        /// <param name="data">discount object data.</param>
+        /// <returns>Transaction current instance.</returns>
         public Transaction SetDiscount(object data)
         {
             if (data.GetType() == typeof(JObject))
@@ -324,7 +326,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Check if status is successful.
         /// </summary>
-        /// <returns>bool</returns>
+        /// <returns>true or false, depends on transaction status.</returns>
         public bool IsSuccessful()
         {
             return Status != null && Status.StatusText != Status.ST_ERROR;
@@ -333,7 +335,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Check if status is approved.
         /// </summary>
-        /// <returns>bool</returns>
+        /// <returns>true or false, depends on transaction status.</returns>
         public bool IsApproved()
         {
             return Status != null && Status.StatusText == Status.ST_APPROVED;
@@ -342,8 +344,8 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Set amount base data.
         /// </summary>
-        /// <param name="data">object</param>
-        /// <returns>object</returns>
+        /// <param name="data">AmountBase object data.</param>
+        /// <returns>Transaction current instance.</returns>
         public Transaction SetAmountBase(object data)
         {
             if (data.GetType() == typeof(JObject))
@@ -364,7 +366,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Conver processor field data to JArray
         /// </summary>
-        /// <returns>JArray</returns>
+        /// <returns>list of processor fields.</returns>
         public JArray ProcessorFieldsToJArray()
         {
             JArray processorFields = new JArray();
@@ -383,7 +385,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Parses the processorFields as a key value JObject.
         /// </summary>
-        /// <returns>JObject</returns>
+        /// <returns>additional data object.</returns>
         public JObject AdditionalData()
         {
             if (ProcessorFields != null)
@@ -404,7 +406,7 @@ namespace PlacetoPay.Redirection.Entities
         /// <summary>
         /// Json Object sent back from API.
         /// </summary>
-        /// <returns>JsonObject</returns>
+        /// <returns>parsed data as JObject.</returns>
         public override JObject ToJsonObject()
         {
             return JObjectFilter(

@@ -68,8 +68,8 @@ namespace PlacetoPay.Redirection.Contracts
         /// <summary>
         /// Reverse endpoint.
         /// </summary>
-        /// <param name="transactionId">string</param>
+        /// <param name="internalReference">string</param>
         /// <returns>ReverseResponse</returns>
-        public abstract ReverseResponse Reverse(string transactionId);
+        public abstract ReverseResponse Reverse(string internalReference);
     }
 }

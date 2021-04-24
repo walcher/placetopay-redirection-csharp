@@ -4,13 +4,9 @@ using NUnit.Framework;
 namespace PlacetoPay.RedirectionTests.Functionality
 {
     [TestFixture, Ignore("collect")]
-    public class CollectRequestTest : BaseTestCase
+    public class CollectServiceTest : BaseTestCase
     {
-        [Test]
-        public void Should_Make_Collect_Request()
-        {
-            string data =
-            "{  \n" +
+        private const string DATA = "{  \n" +
             "   \"payer\":{  \n" +
             "      \"name\":\"John\",\n" +
             "      \"surname\":\"Doe\",\n" +
@@ -32,12 +28,28 @@ namespace PlacetoPay.RedirectionTests.Functionality
             "   }\n" +
             "}";
 
+        [Test]
+        public void Should_Make_Collect_Request()
+        {
             var gateway = GetGateway(new JObject
             {
-                { "rest", new JObject { { "timeout", 45000 }, { "connect_timeout", 30000 } } },
+                { "additional", new JObject { { "timeout", 45000 }, { "connect_timeout", 30000 } } },
             });
 
-            var response = gateway.Collect(data);
+            var response = gateway.Collect(DATA);
+
+            Assert.True(response.IsSuccessful());
+        }
+
+        [Test]
+        public void Should_Make_Soap_Collect_Request()
+        {
+            var gateway = GetGateway(new JObject
+            {
+                { "type", "soap" },
+            });
+
+            var response = gateway.Collect(DATA);
 
             Assert.True(response.IsSuccessful());
         }
