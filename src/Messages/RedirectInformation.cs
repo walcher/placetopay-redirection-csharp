@@ -9,9 +9,6 @@ using System.Linq;
 
 namespace PlacetoPay.Redirection.Messages
 {
-    /// <summary>
-    /// Class <c>RedirectInformation</c> get parsed response data from PlacetoPay service.
-    /// </summary>
     public class RedirectInformation : Entity
     {
         protected const string REQUEST_ID = "requestId";
@@ -35,13 +32,13 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Initializes a new instance of the RedirectInformation class.
         /// </summary>
-        /// <param name="data">string data.</param>
+        /// <param name="data">String data</param>
         public RedirectInformation(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
         /// Initializes a new instance of the RedirectInformation class.
         /// </summary>
-        /// <param name="data">json object data.</param>
+        /// <param name="data">Json object data</param>
         public RedirectInformation(JObject data)
         {
             this.Load<Notification>(data, new JArray { REQUEST_ID });
@@ -70,11 +67,11 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Initializes a new instance of the RedirectInformation class.
         /// </summary>
-        /// <param name="requestId">int request id.</param>
-        /// <param name="request">RedirectRequest object.</param>
-        /// <param name="payment">List of Transaction objects.</param>
-        /// <param name="subscription">SubscriptionInformation object.</param>
-        /// <param name="status">Status object.</param>
+        /// <param name="requestId">Int request id</param>
+        /// <param name="request">RedirectRequest object</param>
+        /// <param name="payment">List of Transaction objects</param>
+        /// <param name="subscription">SubscriptionInformation object</param>
+        /// <param name="status">Status object</param>
         public RedirectInformation(
             int requestId,
             RedirectRequest request,
@@ -138,8 +135,8 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Set request property data.
         /// </summary>
-        /// <param name="data">request data.</param>
-        /// <returns>object</returns>
+        /// <param name="data">Request data</param>
+        /// <returns>object.</returns>
         public RedirectInformation SetRequest(object data)
         {
             if (data != null && data.GetType() == typeof(JObject))
@@ -155,7 +152,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Set payment property data.
         /// </summary>
-        /// <param name="payments">payments data, can be JObject or JArray.</param>
+        /// <param name="payments">Payments data, can be JObject or JArray</param>
         /// <returns>RedirectInformation current instance.</returns>
         public new RedirectInformation SetPayment(object payments)
         {
@@ -190,7 +187,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Set subscription property data.
         /// </summary>
-        /// <param name="data">subscription data.</param>
+        /// <param name="data">Subscription data</param>
         /// <returns>RedirectInformation current instance.</returns>
         public RedirectInformation SetSubscription(object data)
         {
@@ -215,7 +212,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Parce payment data to JArray.
         /// </summary>
-        /// <returns>list of transactions.</returns>
+        /// <returns>List of transactions.</returns>
         public JArray PaymentToJArray()
         {
             if (Payment == null || Payment.GetType() != typeof(List<Transaction>))
@@ -236,7 +233,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Check if transaction is successful.
         /// </summary>
-        /// <returns>true or false, depends on transaction status.</returns>
+        /// <returns>True or false, depends on transaction status.</returns>
         public bool IsSuccessful()
         {
             string[] status = { Status.ST_ERROR, Status.ST_FAILED };
@@ -247,7 +244,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Check if transaction is approved.
         /// </summary>
-        /// <returns>true or false, depends on transaction status.</returns>
+        /// <returns>True or false, depends on transaction status.</returns>
         public bool IsApproved()
         {
             return Status.StatusText == Status.ST_APPROVED;
@@ -265,7 +262,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Obtains the last transaction made to the session.
         /// </summary>
-        /// <param name="approved">optional check param</param>
+        /// <param name="approved">Optional check param</param>
         /// <returns>Transaction object.</returns>
         public Transaction LastTransaction(bool approved = false)
         {
@@ -297,7 +294,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Returns the last authorization associated with the session.
         /// </summary>
-        /// <returns>authorization code.</returns>
+        /// <returns>Authorization code.</returns>
         public string LastAuthorization()
         {
             Transaction transaction = LastApprovedTransaction();
@@ -313,7 +310,7 @@ namespace PlacetoPay.Redirection.Messages
         /// <summary>
         /// Json Object sent back from API.
         /// </summary>
-        /// <returns>parsed data as JObject.</returns>
+        /// <returns>Parsed data as JObject.</returns>
         public override JObject ToJsonObject()
         {
             return JObjectFilter(new JObject {

@@ -6,13 +6,13 @@
     <Description>SDK Redirection for .Net Framework</Description>
     <PackageTags></PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.0.1</Version>
+    <Version>1.0.0</Version>
     <Company>PlacetoPay</Company>
     <PackageProjectUrl>https://www.placetopay.com/web/</PackageProjectUrl>
     <PackageIcon>placetopay.png</PackageIcon>
     <RepositoryUrl>https://github.com/sgodoy17/placetopay-redirection-csharp</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>For full release notes see https://github.com/sgodoy17/placetopay-redirection-csharp/blob/master/releasenotes.md</PackageReleaseNotes>
+    <PackageReleaseNotes>For full release notes see https://github.com/sgodoy17/placetopay-redirection-csharp/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\PlacetoPay.Redirection.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
