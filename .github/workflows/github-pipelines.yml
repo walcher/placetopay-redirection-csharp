@@ -3,6 +3,15 @@ name: PlacetPay Redirection CI pipelines.
 on: [push, pull_request]
 
 jobs:
+  test-win:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run tests on Windows for all targets
+      run: dotnet test -c Release
+
   build:
 
     runs-on: ubuntu-latest
