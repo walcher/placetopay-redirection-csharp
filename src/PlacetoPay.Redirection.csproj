@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <Authors>PlacetoPay, Simon Godoy</Authors>
     <Description>SDK Redirection for .Net Framework</Description>
     <PackageTags></PackageTags>
@@ -27,7 +27,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="RestSharp" Version="106.10.1" />
-    <PackageReference Include="SoapHttpClient" Version="2.2.1" />
+    <PackageReference Include="SoapHttpClient" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
