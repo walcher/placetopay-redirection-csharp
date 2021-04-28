@@ -6,6 +6,7 @@ using PlacetoPay.Redirection.Exceptions;
 using PlacetoPay.Redirection.Messages;
 using SoapHttpClient;
 using SoapHttpClient.Enums;
+using SoapHttpClient.Extensions;
 using System;
 using System.Net.Http;
 using System.Xml;
