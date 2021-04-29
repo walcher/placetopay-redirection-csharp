@@ -21,6 +21,11 @@ namespace PlacetoPay.Redirection.Helpers
         public const string TYPE_CPF = "CPF";
         public const string TYPE_CI = "CI";
         public const string TYPE_RUC = "RUC";
+        public const string TYPE_DNI = "DNI";
+        public const string TYPE_CRCPF = "CRCPF";
+        public const string TYPE_CPJ = "CPJ";
+        public const string TYPE_DIMEX = "DIMEX";
+        public const string TYPE_DIDI = "DIDI";
 
         protected static string[] DOCUMENT_TYPES = {
             TYPE_CC,
@@ -36,6 +41,11 @@ namespace PlacetoPay.Redirection.Helpers
             TYPE_CPF,
             TYPE_CI,
             TYPE_RUC,
+            TYPE_DNI,
+            TYPE_CRCPF,
+            TYPE_CPJ,
+            TYPE_DIMEX,
+            TYPE_DIDI,
         };
 
         public static Dictionary<string, string> VALIDATION_PATTERNS = new Dictionary<string, string>
@@ -53,6 +63,11 @@ namespace PlacetoPay.Redirection.Helpers
             { TYPE_CPF, @"^\d{10,11}$" },
             { TYPE_CI, @"^\d{10}$" },
             { TYPE_RUC, @"^\d{13}$" },
+            { TYPE_DNI, @"^\d{8}$" },
+            { TYPE_CRCPF, @"^[1-9][0-9]{8}$" },
+            { TYPE_CPJ, @"^[1-9][0-9]{9}$" },
+            { TYPE_DIMEX, @"^[1-9][0-9]{10,11}$" },
+            { TYPE_DIDI, @"^[1-9][0-9]{10,11}$" },
         };
 
         /// <summary>
