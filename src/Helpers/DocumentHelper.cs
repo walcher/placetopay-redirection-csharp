@@ -26,7 +26,7 @@ namespace PlacetoPay.Redirection.Helpers
         public const string TYPE_CPJ = "CPJ";
         public const string TYPE_DIMEX = "DIMEX";
         public const string TYPE_DIDI = "DIDI";
-        public const string TYPE_CL_RUT = "CL_RUT";
+        public const string TYPE_CLRUT = "CLRUT";
 
         protected static string[] DOCUMENT_TYPES = {
             TYPE_CC,
@@ -47,7 +47,7 @@ namespace PlacetoPay.Redirection.Helpers
             TYPE_CPJ,
             TYPE_DIMEX,
             TYPE_DIDI,
-            TYPE_CL_RUT,
+            TYPE_CLRUT,
         };
 
         public static Dictionary<string, string> VALIDATION_PATTERNS = new Dictionary<string, string>
@@ -70,7 +70,7 @@ namespace PlacetoPay.Redirection.Helpers
             { TYPE_CPJ, @"^[1-9][0-9]{9}$" },
             { TYPE_DIMEX, @"^[1-9][0-9]{10,11}$" },
             { TYPE_DIDI, @"^[1-9][0-9]{10,11}$" },
-            { TYPE_CL_RUT, @"^(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])$" },
+            { TYPE_CLRUT, @"^(\d{1,3}(?:\.?\d{1,3}){2}-[\dkK])$" },
         };
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace PlacetoPay.Redirection.Helpers
                 return false;
             }
 
-            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+            Regex regex = new Regex(pattern);
 
             return document != null && regex.IsMatch(document);
         }
@@ -136,6 +136,7 @@ namespace PlacetoPay.Redirection.Helpers
                 TYPE_NIT,
                 TYPE_RUT,
                 TYPE_RUC,
+                TYPE_CLRUT,
             };
 
             if (document != null)

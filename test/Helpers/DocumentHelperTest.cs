@@ -91,9 +91,12 @@ namespace PlacetoPay.RedirectionTests.Helpers
         [Test]
         public void Should_Validate_Correctly_The_CL_RUT()
         {
-            Assert.IsTrue(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CL_RUT, "30.686.957-4"));
-            Assert.IsTrue(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CL_RUT, "13.342.430-K"));
-            Assert.IsFalse(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CL_RUT, "1798288377"));
+            Assert.IsTrue(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CLRUT, "12.345.678-5"));
+            Assert.IsTrue(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CLRUT, "30.686.957-4"));
+            Assert.IsTrue(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CLRUT, "13.342.430-K"));
+            Assert.IsFalse(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CLRUT, "13.342.430-L"));
+            Assert.IsFalse(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CLRUT, "1798288377"));
+            Assert.IsFalse(DocumentHelper.IsValidDocument(DocumentHelper.TYPE_CLRUT, "Gdsdfgdfghfg"));
         }
     }
 }
