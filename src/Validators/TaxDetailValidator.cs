@@ -1,8 +1,6 @@
 ﻿using PlacetoPay.Redirection.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PlacetoPay.Redirection.Validators
 {

@@ -4,9 +4,6 @@ using System.Linq;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>Country</c>
-    /// </summary>
     public class Country : BaseValidator
     {
         public static Dictionary<string, string> ISO2_ISO3 = new Dictionary<string, string>

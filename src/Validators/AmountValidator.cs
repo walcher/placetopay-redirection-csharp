@@ -1,14 +1,9 @@
 ﻿using PlacetoPay.Redirection.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>AmountValidator</c>
-    /// </summary>
     public class AmountValidator : BaseValidator
     {
         /// <summary>

@@ -4,9 +4,6 @@ using System.Text.RegularExpressions;
 
 namespace PlacetoPay.Redirection.Helpers
 {
-    /// <summary>
-    /// Class <c>DocumentHelper</c>
-    /// </summary>
     public class DocumentHelper
     {
         public const string TYPE_CC = "CC";

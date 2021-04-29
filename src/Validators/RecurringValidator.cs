@@ -4,9 +4,6 @@ using System.Linq;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>RecurringValidator</c>
-    /// </summary>
     public class RecurringValidator : BaseValidator
     {
         public const string PERIOD_DAY = "D";
@@ -37,7 +34,7 @@ namespace PlacetoPay.Redirection.Validators
                 errors.Add("periodicity");
             }
 
-            if (recurring.Interval == 0)
+            if (!IsInteger(recurring.Interval.ToString()))
             {
                 errors.Add("interval");
             }
@@ -47,7 +44,7 @@ namespace PlacetoPay.Redirection.Validators
                 errors.Add("nextPayment");
             }
 
-            if (recurring.MaxPeriods == 0)
+            if (!IsInteger(recurring.MaxPeriods.ToString()))
             {
                 errors.Add("maxPeriods");
             }
