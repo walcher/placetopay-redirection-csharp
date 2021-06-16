@@ -6,19 +6,16 @@ using System.Text.RegularExpressions;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>BaseValidator</c>
-    /// </summary>
     public class BaseValidator
     {
-        public const string PATTERN_REFERENCE = @"^[\d\w\-\.,\$#\/\\\'!]{1,32}$/";
-        public const string PATTERN_DESCRIPTION = @"^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\s\d\.,\$#\&\-\(_)(\)\/\%\+\\\']{2,250}$";
+        public const string PATTERN_REFERENCE = @"^[\d\w\-\.,\$#\/\\\'!\| ]{1,32}$";
+        public const string PATTERN_DESCRIPTION = @"(?i)^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\s\d\.,\$#\&\-\\_(\)\/\%\+\\\':;\|\@]{2,250}$(?-i)";
 
         /// <summary>
         /// Check if the IP is valid.
         /// </summary>
-        /// <param name="ip">string</param>
-        /// <returns>bool</returns>
+        /// <param name="ip">String ip to be validated</param>
+        /// <returns>True or false, depends on regex.</returns>
         public static bool IsValidIp(string ip)
         {
             if (string.IsNullOrWhiteSpace(ip))
@@ -39,8 +36,8 @@ namespace PlacetoPay.Redirection.Validators
         /// <summary>
         /// Get the value type and check if valid.
         /// </summary>
-        /// <param name="obj">object</param>
-        /// <returns>bool</returns>
+        /// <param name="obj">Instance of Object</param>
+        /// <returns>True or false, depends on object.</returns>
         public static bool IsAnyNullOrEmpty(object obj)
         {
             if (obj is null)
@@ -54,8 +51,8 @@ namespace PlacetoPay.Redirection.Validators
         /// <summary>
         /// Check if the value is null or empty.
         /// </summary>
-        /// <param name="value">object</param>
-        /// <returns></returns>
+        /// <param name="value">Instace of Object</param>
+        /// <returns>True or false, depends on object.</returns>
         private static bool IsNullOrEmpty(object value)
         {
             if (value is null)
@@ -71,9 +68,9 @@ namespace PlacetoPay.Redirection.Validators
         /// <summary>
         /// Check if is a valid pattern.
         /// </summary>
-        /// <param name="value">string</param>
-        /// <param name="pattern">string</param>
-        /// <returns>bool</returns>
+        /// <param name="value">String value to check</param>
+        /// <param name="pattern">String regex</param>
+        /// <returns>True or false, depends on regex.</returns>
         public static bool MatchPattern(string value, string pattern)
         {
             Regex re = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -84,10 +81,10 @@ namespace PlacetoPay.Redirection.Validators
         /// <summary>
         /// Check if the value is a valid string.
         /// </summary>
-        /// <param name="value">string</param>
-        /// <param name="min">int</param>
-        /// <param name="required">bool</param>
-        /// <returns>bool</returns>
+        /// <param name="value">String value to check</param>
+        /// <param name="min">Min length of the value</param>
+        /// <param name="required">Check if value is required</param>
+        /// <returns>True or false, depends on check.</returns>
         public static bool IsValidString(string value, int min, bool required)
         {
             if (required && IsAnyNullOrEmpty(value))

@@ -5,16 +5,13 @@ using PlacetoPay.Redirection.Contracts;
 
 namespace PlacetoPay.RedirectionTests
 {
-    /// <summary>
-    /// Class <c>BaseTestCase</c>
-    /// </summary>
     public class BaseTestCase
     {
         /// <summary>
         /// Get gateway.
         /// </summary>
-        /// <param name="data">JObject</param>
-        /// <returns>Gateway</returns>
+        /// <param name="data">Additional configuration data</param>
+        /// <returns>PlacetoPayRedirection instance</returns>
         public Gateway GetGateway(JObject data)
         {
             Env.Load();

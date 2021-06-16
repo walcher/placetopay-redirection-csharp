@@ -4,9 +4,6 @@ using System.Linq;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>AmountBaseValidator</c>
-    /// </summary>
     public class AmountBaseValidator : BaseValidator
     {
         /// <summary>

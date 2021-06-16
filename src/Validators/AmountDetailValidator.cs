@@ -1,13 +1,9 @@
 ﻿using PlacetoPay.Redirection.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>AmountDetailValidator</c>
-    /// </summary>
     public class AmountDetailValidator : BaseValidator
     {
         public const string TP_DISCOUNT = "discount";

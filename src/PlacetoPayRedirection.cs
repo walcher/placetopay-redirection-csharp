@@ -10,30 +10,27 @@ using System.Collections.Generic;
 
 namespace PlacetoPay.Redirection
 {
-    /// <summary>
-    /// Class <c>PlacetoPay</c>
-    /// </summary>
     public class PlacetoPayRedirection : Gateway
     {
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         public PlacetoPayRedirection() { }
 
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         /// <param name="data">string</param>
         public PlacetoPayRedirection(string data) : this(JsonFormatter.ParseJObject(data)) { }
 
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         /// <param name="data">JObject</param>
         public PlacetoPayRedirection(JObject data) : base(data) { }
 
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         /// <param name="login">string</param>
         /// <param name="trankey">string</param>
@@ -41,7 +38,7 @@ namespace PlacetoPay.Redirection
         public PlacetoPayRedirection(string login, string trankey, Uri url) : base(login, trankey, url) { }
 
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         /// <param name="login">string</param>
         /// <param name="trankey">string</param>
@@ -55,7 +52,7 @@ namespace PlacetoPay.Redirection
             ) : base(login, trankey, url, requestType) { }
 
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         /// <param name="login">string</param>
         /// <param name="trankey">string</param>
@@ -71,7 +68,7 @@ namespace PlacetoPay.Redirection
             ) : base(login, trankey, url, additional, requestType) { }
 
         /// <summary>
-        /// PlacetoPayRedirection constructor.
+        /// Initializes a new instance of the PlacetoPayRedirection class.
         /// </summary>
         /// <param name="login">string</param>
         /// <param name="trankey">string</param>
@@ -91,7 +88,7 @@ namespace PlacetoPay.Redirection
         /// <summary>
         /// Get carrier instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Carrier instance.</returns>
         private Carrier Carrier()
         {
             if (carrier is Carrier)

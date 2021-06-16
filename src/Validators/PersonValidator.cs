@@ -6,19 +6,15 @@ using System.Linq;
 
 namespace PlacetoPay.Redirection.Validators
 {
-    /// <summary>
-    /// Class <c>PersonValidator</c>
-    /// </summary>
     public class PersonValidator : Country
     {
-        //public const string PATTERN_NAME = @"^[\p{L} \.\-]+$";
-        public const string PATTERN_NAME = @"^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã][a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\'\.\&\-\d ]{2,60}";
+        public const string PATTERN_NAME = @"(?i)^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã][a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\'\.\&\-\d ]{1,60}$(?-i)";
         public const string PATTERN_SURNAME = PATTERN_NAME;
         public const string PATTERN_EMAIL = @"^([a-zA-Z0-9_\.\-])+[^\.\-\ ]\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})$";
         public const string PATTERN_MOBILE = PhoneNumber.VALIDATION_PATTERN;
-        public const string PATTERN_CITY = @"^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\'\. ]{2,50}";
+        public const string PATTERN_CITY = @"(?i)^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\'\. ]{2,50}$(?-i)";
         public const string PATTERN_STATE = PATTERN_NAME;
-        public const string PATTERN_STREET = @"^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\'\.\,\&\-\#\s\d\(\)\(_)]{2,250}";
+        public const string PATTERN_STREET = @"(?i)^[a-zñáéíóúäëïöüàèìòùÑÁÉÍÓÚÄËÏÖÜÀÈÌÒÙÇçÃã\'\.\,\&\-\#\\_\s\d\(\)]{2,250}$(?-i)";
         public const string PATTERN_PHONE = PhoneNumber.VALIDATION_PATTERN;
         public const string PATTERN_POSTALCODE = @"^[0-9]{4,8}$";
         public const string PATTERN_COUNTRY = @"^[A-Z]{2}$";
@@ -26,9 +22,9 @@ namespace PlacetoPay.Redirection.Validators
         /// <summary>
         /// Get the property name pattern.
         /// </summary>
-        /// <param name="field">string</param>
-        /// <param name="cleanLimiters">bool</param>
-        /// <returns>string</returns>
+        /// <param name="field">String of the field to be searched</param>
+        /// <param name="cleanLimiters">Check if remove the pattern limiter</param>
+        /// <returns>Return regex.</returns>
         public static string GetPattern(string field, bool cleanLimiters = false)
         {
             try
@@ -38,7 +34,7 @@ namespace PlacetoPay.Redirection.Validators
 
                 if (cleanLimiters)
                 {
-                    pattern.Substring(1, -1);
+                    return pattern.Substring(0, pattern.Length - 5).Substring(4);
                 }
 
                 return pattern;

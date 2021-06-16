@@ -6,9 +6,6 @@ using System.Reflection;
 
 namespace PlacetoPay.Redirection.Contracts
 {
-    /// <summary>
-    /// Class <c>Entity</c>
-    /// </summary>
     public abstract class Entity
     {
         protected const string ADDRESS_PROPERTY = "Address";
